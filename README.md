@@ -1,4 +1,4 @@
-# API для проекта меню ресторана. учебный проект Ylab. 
+# API для проекта Меню ресторана. Учебный проект Ylab. 
 
 
 # Начало работы:
@@ -6,7 +6,7 @@
 ```bash
 git clone https://github.com/pichugina-v/ylab_project.git
 ```
-*Создайте вирутальное окружение
+* Создайте вирутальное окружение
 ```bash
 python -m venv venv
 ```
@@ -27,9 +27,7 @@ POSTGRES_PORT=5432
 POSTGRES_DB=<название бд>
 ```
 * Подключите аlembic к базе данных
-```
-* В файле `alembic.ini` заполните переменную `sqlalchemy.url` 
-* Выполните миграции
+В файле `alembic.ini` заполните переменную `sqlalchemy.url` и выполните миграции
 ```
 alembic revision --autogenerate -m "create tables"
 python -m alembic upgrade head
