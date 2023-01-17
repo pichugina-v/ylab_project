@@ -22,12 +22,15 @@ cd app/
 ```bash
 POSTGRES_USER=<логин для подключения к базе данных>
 POSTGRES_PASSWORD=<пароль для подключения к базе данных>
-POSTGRES_HOST=0.0.0.0
+POSTGRES_HOST=<хост>
 POSTGRES_PORT=5432
-POSTGRES_DB=<название бд>
+POSTGRES_DB=<название базы данных>
 ```
-* Подключите аlembic к базе данных
-В файле `alembic.ini` заполните переменную `sqlalchemy.url` и выполните миграции
+* Подключите аlembic к базе данных. В файле `alembic.ini` заполните переменную `sqlalchemy.url` 
+```
+postgresql://username:password@host:port/database
+```
+* Выполните миграции
 ```
 alembic revision --autogenerate -m "create tables"
 python -m alembic upgrade head
