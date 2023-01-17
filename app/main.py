@@ -7,17 +7,17 @@ def create_app():
     app = FastAPI()
     app.include_router(
         menu.router,
-        prefix='/api/v1/menus',
+        prefix='/api/v1',
         tags=['menu']
     )
     app.include_router(
         submenu.router,
-        prefix='/api/v1/menus/{menu_id}/submenus',
+        prefix='/api/v1/menus/{menu_id}',
         tags=['submenu']
     )
     app.include_router(
         dish.router,
-        prefix='/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes',
+        prefix='/api/v1/menus/{menu_id}/submenus/{submenu_id}',
         tags=['dish']
     )
     return app 

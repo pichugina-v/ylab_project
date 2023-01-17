@@ -11,10 +11,10 @@ class SubmenuCreate(SubmenuBase):
 
 
 class SubmenuUpdate(SubmenuBase):
-    title: str
+    pass
 
 
-class SubmenuInDB(BaseModel):
+class SubmenuInDB(SubmenuBase):
     id: int
 
     
@@ -23,4 +23,5 @@ class SubmenuInDB(BaseModel):
 
 
 class SubmenuGet(SubmenuInDB):
-    dishes_count: int
+    # dishes_count: int
+    id: str

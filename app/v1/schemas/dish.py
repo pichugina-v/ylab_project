@@ -12,7 +12,7 @@ class DishCreate(DishBase):
 
 
 class DishUpdate(DishBase):
-    title: str
+    pass
 
 
 class DishInDB(DishBase):
@@ -24,4 +24,5 @@ class DishInDB(DishBase):
 
 
 class DishGet(DishInDB):
-    pass
+    id: str
+    price: str
