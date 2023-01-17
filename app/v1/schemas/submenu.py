@@ -23,5 +23,5 @@ class SubmenuInDB(SubmenuBase):
 
 
 class SubmenuGet(SubmenuInDB):
-    # dishes_count: int
+    dishes_count: int
     id: str

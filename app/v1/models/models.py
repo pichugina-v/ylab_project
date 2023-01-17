@@ -27,6 +27,12 @@ class Submenu(Base):
         'Dish', back_populates='submenus',
         cascade='all, delete', passive_deletes=True
     )
+    dishes_count = column_property(
+        select(func.count(Dish.id))
+        .where(Dish.submenu_id == id)
+        .correlate_except(Dish)
+        .scalar_subquery()
+    )
 
 
 class Menu(Base):
@@ -39,18 +45,16 @@ class Menu(Base):
         'Submenu', back_populates='menu',
         cascade='all, delete', passive_deletes=True
     )
-    # count = select(func.count(Submenu.id)).where(Submenu.menu_id == id).correlate_except(Submenu).scalar_subquery()
     submenus_count = column_property(
         select(func.count(Submenu.id))
         .where(Submenu.menu_id == id)
         .correlate_except(Submenu)
         .scalar_subquery()
     )
-
-# inspect(Menu).add_property(
-#     column_property(
-#         select(func.count(Address.id))
-#         .where(Address.user_id == User.id)
-#         .scalar_subquery()
-#     )
-# )
+    dishes_count = column_property(
+        select(func.count(Dish.id))
+        .join(Submenu, Submenu.menu_id == id)
+        .where(Dish.submenu_id == Submenu.id)
+        .correlate_except(Submenu)
+        .scalar_subquery()
+    )
