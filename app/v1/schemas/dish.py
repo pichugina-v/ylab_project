@@ -25,4 +25,3 @@ class DishInDB(DishBase):
 
 class DishGet(DishInDB):
     id: str
-    price: str

@@ -30,7 +30,7 @@ def create_dish(submenu_id: int, d: DishCreate, db: Session = Depends(get_db)):
         db=db, dish=d, submenu_id=submenu_id
     )
 
-@router.patch("/dishes/{dishes_id}", response_model=DishGet)
+@router.patch("/dishes/{dish_id}", response_model=DishGet)
 def update_dish(dish_id: int, d: DishUpdate, db: Session = Depends(get_db)):
     db_dish = dish.get_dish(db, dish_id=dish_id)
     if db_dish is None:

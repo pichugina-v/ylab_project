@@ -23,6 +23,6 @@ class MenuInDB(MenuBase):
 
 
 class MenuGet(MenuInDB):
-    # submenus_count: int
+    submenus_count: int
     # dishes_count: int
     id: str

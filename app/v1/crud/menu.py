@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from ..models.models import Menu
+from ..models.models import Menu, Submenu
 from ..schemas.menu import MenuCreate, MenuUpdate
 
 
