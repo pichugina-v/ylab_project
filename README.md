@@ -17,7 +17,6 @@ POSTGRES_DB=<название базы данных>
 ```
 * Подключите аlembic к базе данных. В файле `alembic.ini` заполните переменную `sqlalchemy.url` и выполните миграции
 ```bash
-sqlalchemy.url = driver://user:pass@localhost/dbname
 alembic upgrade head
 ```
 * Запустите приложение
