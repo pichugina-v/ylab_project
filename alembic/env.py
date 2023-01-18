@@ -12,6 +12,11 @@ config = context.config
 from app.v1.models.models import *
 from app.db.sqlalchemy_base import Base
 
+from app.db.database import SQLALCHEMY_DATABASE_URI
+
+sqlalchemy_url = SQLALCHEMY_DATABASE_URI
+config.set_main_option('sqlalchemy.url', sqlalchemy_url)
+
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
