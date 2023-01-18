@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, select, func
 from sqlalchemy.orm import relationship, column_property
 
-from db.sqlalchemy_base import Base
+from app.db.sqlalchemy_base import Base
 
 
 class Dish(Base):

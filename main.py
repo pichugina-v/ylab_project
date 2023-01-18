@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from v1.routers import menu, submenu, dish
+from app.v1.routers import menu, submenu, dish
 
 
 def create_app():

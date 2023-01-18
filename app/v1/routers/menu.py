@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from db.database import get_db
+from app.db.database import get_db
 from ..crud import menu
 from ..schemas.menu import MenuGet, MenuCreate, MenuUpdate
 
