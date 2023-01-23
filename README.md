@@ -14,12 +14,13 @@ POSTGRES_PASSWORD=<пароль для подключения к базе дан
 POSTGRES_HOST=<хост>
 POSTGRES_PORT=5432
 POSTGRES_DB=<название базы данных>
-```
-* Выполните миграции
-```bash
-alembic upgrade head
+POSTGRES_SERVICE=web_app_db
 ```
 * Запустите приложение
 ```bash
- uvicorn main:app --reload
+docker-compose up -d
+```
+* Запустите тесты
+```bash
+docker-compose -f "docker-compose.tests.yaml" up
 ```
