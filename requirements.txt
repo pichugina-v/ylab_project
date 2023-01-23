@@ -21,10 +21,10 @@ MarkupSafe==2.1.1
 orjson==3.8.5
 packaging==23.0
 pluggy==1.0.0
-psycopg2==2.9.5
 psycopg2-binary==2.9.5
 pydantic==1.10.4
 pytest==7.2.1
+pytest-mock==3.10.0
 python-dotenv==0.21.0
 python-multipart==0.0.5
 PyYAML==6.0

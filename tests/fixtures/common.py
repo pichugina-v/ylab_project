@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 
+# import alembic
+# from alembic.config import Config
 from pytest import fixture
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -12,11 +14,10 @@ from app.db.sqlalchemy_base import Base
 load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = (f'postgresql://{os.getenv("POSTGRES_USER")}:'
-                           f'{os.getenv("POSTGRES_PASSWORD")}@'
-                           f'{os.getenv("POSTGRES_HOST")}:'
-                           f'{os.getenv("POSTGRES_PORT")}/'
-                           f'{os.getenv("POSTGRES_DB")}')
-
+                                f'{os.getenv("POSTGRES_PASSWORD")}@'
+                                f'{os.getenv("POSTGRES_SERVICE")}:'
+                                f'{os.getenv("POSTGRES_PORT")}/'
+                                f'{os.getenv("POSTGRES_DB")}')
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 TestingSessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
@@ -39,7 +40,6 @@ def db():
 
 @fixture(autouse=True, scope="function")
 def clear_db(db):
-    yield db
     for tbl in reversed(Base.metadata.sorted_tables):
         db.execute(tbl.delete())
     db.execute("ALTER SEQUENCE menus_id_seq RESTART WITH 1")
