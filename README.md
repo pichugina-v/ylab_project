@@ -2,6 +2,16 @@
 
 
 # Начало работы:
+* Запустите приложение
+```bash
+docker-compose up -d
+```
+* Запустите тесты
+```bash
+docker-compose -f "docker-compose.tests.yaml" up
+```
+
+___
 * Создайте вирутальное окружение и установите зависимости
 ```bash
 python -m venv venv
@@ -16,11 +26,11 @@ POSTGRES_PORT=5432
 POSTGRES_DB=<название базы данных>
 POSTGRES_SERVICE=web_app_db
 ```
+* Выполните миграции
+```bash
+alembic upgrade head
+```
 * Запустите приложение
 ```bash
-docker-compose up -d
-```
-* Запустите тесты
-```bash
-docker-compose -f "docker-compose.tests.yaml" up
+ uvicorn main:app --reload
 ```
