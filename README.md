@@ -2,15 +2,7 @@
 
 
 # Начало работы:
-* Создайте файл `.env` и заполните переменные окружения
-```bash
-POSTGRES_USER=<логин для подключения к базе данных>
-POSTGRES_PASSWORD=<пароль для подключения к базе данных>
-POSTGRES_HOST=<хост>
-POSTGRES_PORT=5432
-POSTGRES_DB=<название базы данных>
-POSTGRES_SERVICE=web_app_db
-```
+* Создайте файл `.env` и заполните переменные окружения из примера`.env.example`
 * Запустите приложение
 ```bash
 docker-compose up -d
@@ -26,15 +18,7 @@ ___
 python -m venv venv
 pip install -r requirements.txt
 ```
-* Создайте файл `.env` и заполните переменные окружения
-```bash
-POSTGRES_USER=<логин для подключения к базе данных>
-POSTGRES_PASSWORD=<пароль для подключения к базе данных>
-POSTGRES_HOST=<хост>
-POSTGRES_PORT=5432
-POSTGRES_DB=<название базы данных>
-POSTGRES_SERVICE=web_app_db
-```
+* Создайте файл `.env` и заполните переменные окружения из примера`.env.example`
 * Выполните миграции
 ```bash
 alembic upgrade head
