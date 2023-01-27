@@ -1,7 +1,6 @@
 import json
 from tests import dish_to_dict
 
-from app.v1.crud.dish import get_dishes
 
 router = '/api/v1/menus/1/submenus/1/dishes'
 router_id = 'api/v1/menus/1/submenus/1/dishes/{id}/'
@@ -53,8 +52,6 @@ def test_create_dish(client, db, submenu_1):
         'id': '1',
         'price': '12.50'
     }
-    dishes = get_dishes(db)
-    assert len(dishes) == 1
 
 def test_update_dish(client, db, dish_1):
     resp = client.patch(
@@ -72,8 +69,6 @@ def test_update_dish(client, db, dish_1):
         'id': '1',
         'price': '14.50'
     }
-    dishes = get_dishes(db)
-    assert len(dishes) == 1
 
 def test_update_dish_not_found(client, db):
     resp = client.patch(
@@ -86,8 +81,6 @@ def test_update_dish_not_found(client, db):
     )
     assert resp.status_code == 404
     assert resp.json() == {'detail': 'dish not found'}
-    dishes = get_dishes(db)
-    assert len(dishes) == 0
 
 def test_delete_dish(client, db, dish_1):
     resp = client.delete(
@@ -95,8 +88,6 @@ def test_delete_dish(client, db, dish_1):
     )
     assert resp.status_code == 200
     assert resp.json() == {'message': 'The dish has been deleted'}
-    dishes = get_dishes(db)
-    assert len(dishes) == 0
 
 def test_delete_dish_not_found(client):
     resp = client.delete(

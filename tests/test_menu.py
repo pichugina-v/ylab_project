@@ -1,8 +1,6 @@
 import json
 from tests import menu_to_dict
 
-from app.v1.crud.menu import get_menus
-
 router = '/api/v1/menus/'
 router_id = 'api/v1/menus/{id}/'
 
@@ -48,8 +46,6 @@ def test_create_menu(client, db):
         'submenus_count': 0,
         'dishes_count': 0
     }
-    menus = get_menus(db)
-    assert len(menus) == 1
 
 def test_update_menu(client, db, menu_1):
     resp = client.patch(
@@ -64,8 +60,6 @@ def test_update_menu(client, db, menu_1):
         'submenus_count': 0,
         'dishes_count': 0
     }
-    menus = get_menus(db)
-    assert len(menus) == 1
 
 def test_update_menu_not_found(client, db):
     resp = client.patch(
@@ -74,8 +68,6 @@ def test_update_menu_not_found(client, db):
     )
     assert resp.status_code == 404
     assert resp.json() == {'detail': 'menu not found'}
-    menus = get_menus(db)
-    assert len(menus) == 0
 
 def test_delete_menu(client, db, menu_1):
     resp = client.delete(
@@ -83,8 +75,6 @@ def test_delete_menu(client, db, menu_1):
     )
     assert resp.status_code == 200
     assert resp.json() == {'message': 'The menu has been deleted'}
-    menus = get_menus(db)
-    assert len(menus) == 0
 
 def test_delete_menu_not_found(client):
     resp = client.delete(

@@ -25,5 +25,5 @@ alembic upgrade head
 ```
 * Запустите приложение
 ```bash
- uvicorn main:app --reload
+uvicorn main:app --reload
 ```

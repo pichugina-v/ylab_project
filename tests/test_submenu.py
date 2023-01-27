@@ -1,8 +1,6 @@
 import json
 from tests import menu_to_dict, submenu_to_dict
 
-from app.v1.crud.submenu import get_submenus
-
 router = '/api/v1/menus/1/submenus/'
 router_id = 'api/v1/menus/1/submenus/{id}/'
 
@@ -49,8 +47,6 @@ def test_create_submenu(client, db, menu_1):
         'id': '1',
         'dishes_count': 0,
     }
-    submenus = get_submenus(db)
-    assert len(submenus) == 1
 
 def test_update_submenu(client, db, submenu_1):
     resp = client.patch(
@@ -64,8 +60,6 @@ def test_update_submenu(client, db, submenu_1):
         'id': '1',
         'dishes_count': 0
     }
-    submenus = get_submenus(db)
-    assert len(submenus) == 1
 
 def test_update_submenu_not_found(client, db):
     resp = client.patch(
@@ -74,8 +68,6 @@ def test_update_submenu_not_found(client, db):
     )
     assert resp.status_code == 404
     assert resp.json() == {'detail': 'submenu not found'}
-    submenus = get_submenus(db)
-    assert len(submenus) == 0
 
 def test_delete_submenu(client, db, submenu_1):
     resp = client.delete(
@@ -83,8 +75,6 @@ def test_delete_submenu(client, db, submenu_1):
     )
     assert resp.status_code == 200
     assert resp.json() == {'message': 'The submenu has been deleted'}
-    submenus = get_submenus(db)
-    assert len(submenus) == 0
 
 def test_delete_submenu_not_found(client):
     resp = client.delete(

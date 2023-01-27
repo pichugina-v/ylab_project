@@ -1,47 +1,36 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends
 
-from app.db.database import get_db
-from ..crud import dish
+from ..dependencies import get_dish_service
+from ..services.dish_service import DishService
 from ..schemas.dish import DishGet, DishCreate, DishUpdate
 
 router = APIRouter()
 
 @router.get('/dishes', response_model=List[DishGet])
-def read_dishes(db: Session = Depends(get_db)):
-    dishes = dish.get_dishes(db)
-    return dishes
+def read_dishes(dish_service: DishService = Depends(get_dish_service)):
+    return dish_service.get_dishes()
 
 @router.get("/dishes/{dish_id}", response_model=DishGet)
-def read_dish(dish_id: int, db: Session = Depends(get_db)):
-    db_dish = dish.get_dish(db, dish_id=dish_id)
-    if db_dish is None:
-        raise HTTPException(status_code=404, detail="dish not found")
-    return db_dish
+def read_dish(dish_id: int,
+              dish_service: DishService = Depends(get_dish_service)):
+    return dish_service.get_dish(dish_id=dish_id)
 
 @router.post("/dishes", response_model=DishGet, status_code=201)
-def create_dish(submenu_id: int, d: DishCreate, db: Session = Depends(get_db)):
-    db_dish = dish.get_dish_by_title(db, title=d.title)
-    if db_dish:
-        raise HTTPException(status_code=400, detail="dish with this title already exist")
-    return dish.create_dish(
-        db=db, dish=d, submenu_id=submenu_id
-    )
+def create_dish(submenu_id: int,
+                dish: DishCreate,
+                dish_service: DishService = Depends(get_dish_service)):
+    return dish_service.create_dish(submenu_id=submenu_id, dish=dish)
 
 @router.patch("/dishes/{dish_id}", response_model=DishGet)
-def update_dish(dish_id: int, d: DishUpdate, db: Session = Depends(get_db)):
-    db_dish = dish.get_dish(db, dish_id=dish_id)
-    if db_dish is None:
-        raise HTTPException(status_code=404, detail="dish not found")
-    return dish.update_dish(db=db, dish=d, dish_id=dish_id)
+def update_dish(submenu_id: int,
+                dish_id: int,
+                dish: DishUpdate,
+                dish_service: DishService = Depends(get_dish_service)):
+    return dish_service.update_dish(submenu_id=submenu_id, dish_id=dish_id, dish=dish)
 
 @router.delete("/dishes/{dish_id}")
-def delete_submenu(dish_id: int, db: Session = Depends(get_db)):
-    db_dish = dish.get_dish(db, dish_id=dish_id)
-    if db_dish is None:
-        raise HTTPException(status_code=404, detail="dish not found")
-    dish.delete_dish(db=db, dish_id=dish_id)
-    return {"message": "The dish has been deleted"}
-    
+def delete_dish(dish_id: int,
+                dish_service: DishService = Depends(get_dish_service)):
+    return dish_service.delete_dish(dish_id=dish_id)
