@@ -16,9 +16,7 @@ class DishUpdate(DishBase):
 
 
 class DishInDB(DishBase):
-    id: int
 
-    
     class Config:
         orm_mode = True
 

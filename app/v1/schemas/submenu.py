@@ -15,9 +15,7 @@ class SubmenuUpdate(SubmenuBase):
 
 
 class SubmenuInDB(SubmenuBase):
-    id: int
 
-    
     class Config:
         orm_mode = True
 

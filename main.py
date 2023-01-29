@@ -1,25 +1,26 @@
 from fastapi import FastAPI
 
-from app.v1.routers import menu, submenu, dish
+from app.v1.routers import dish, menu, submenu
 
 
 def create_app():
-    app = FastAPI()
+    app = FastAPI(docs_url='/api/docs', redoc_url='/api/redoc')
     app.include_router(
         menu.router,
         prefix='/api/v1',
-        tags=['menu']
+        tags=['menu'],
     )
     app.include_router(
         submenu.router,
         prefix='/api/v1/menus/{menu_id}',
-        tags=['submenu']
+        tags=['submenu'],
     )
     app.include_router(
         dish.router,
         prefix='/api/v1/menus/{menu_id}/submenus/{submenu_id}',
-        tags=['dish']
+        tags=['dish'],
     )
-    return app 
+    return app
+
 
 app = create_app()
