@@ -61,4 +61,4 @@ class SubmenuService:
         self.crud.delete(submenu_id=submenu_id)
         self.cache.delete_menu_cache(url)
         self.cache.delete(jsonable_encoder(url))
-        return {'message': 'The submenu has been deleted'}
+        return {'status': 'true', 'message': 'The menu has been deleted'}

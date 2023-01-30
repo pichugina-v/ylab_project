@@ -1,18 +1,22 @@
+from typing import Optional, Union
+
 from pydantic import BaseModel
 
 
 class DishBase(BaseModel):
     title: str
+    description: Optional[str]
+    price: Optional[str]
+
+
+class DishCreate(DishBase):
     description: str
     price: str
 
 
-class DishCreate(DishBase):
-    pass
-
-
 class DishUpdate(DishBase):
-    pass
+    description: Union[str, None] = None
+    price: Union[str, None] = None
 
 
 class DishInDB(DishBase):

@@ -57,4 +57,4 @@ class MenuService:
             raise HTTPException(status_code=404, detail='menu not found')
         self.crud.delete(menu_id=menu_id)
         self.cache.delete(jsonable_encoder(url))
-        return {'message': 'The menu has been deleted'}
+        return {'status': 'true', 'message': 'The menu has been deleted'}

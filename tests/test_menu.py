@@ -88,7 +88,10 @@ def test_delete_menu(client, db, menu_1):
         router_id.format(id=1),
     )
     assert resp.status_code == 200
-    assert resp.json() == {'message': 'The menu has been deleted'}
+    assert resp.json() == {
+        'status': 'true',
+        'message': 'The menu has been deleted',
+    }
 
 
 def test_delete_menu_not_found(client):

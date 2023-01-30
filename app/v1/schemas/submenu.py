@@ -1,17 +1,19 @@
+from typing import Optional, Union
+
 from pydantic import BaseModel
 
 
 class SubmenuBase(BaseModel):
     title: str
-    description: str
+    description: Optional[str]
 
 
 class SubmenuCreate(SubmenuBase):
-    pass
+    description: str
 
 
 class SubmenuUpdate(SubmenuBase):
-    pass
+    description: Union[str, None] = None
 
 
 class SubmenuInDB(SubmenuBase):

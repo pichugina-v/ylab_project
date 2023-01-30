@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Body, Depends, Request
 
 from ..dependencies import get_submenu_service
+from ..schemas.error_message import Message404, MessageDeleted
 from ..schemas.submenu import SubmenuCreate, SubmenuGet, SubmenuUpdate
 from ..services.submenu_service import SubmenuService
 
@@ -24,6 +25,7 @@ def read_submenus(
 
 @router.get(
     '/submenus/{submenu_id}',
+    responses={404: {'model': Message404}},
     response_model=SubmenuGet,
     summary='Получить детальную информацию о подменю',
     response_description='Детальная информация о подменю',
@@ -52,7 +54,12 @@ def read_submenu(
 def create_submenu(
     menu_id: int,
     request: Request,
-    submenu: SubmenuCreate,
+    submenu: SubmenuCreate = Body(
+        example={
+            'title': 'Submenu 1',
+            'description': 'Submenu 1 description',
+        },
+    ),
     submenu_service: SubmenuService = Depends(
         get_submenu_service,
     ),
@@ -67,6 +74,7 @@ def create_submenu(
 
 @router.patch(
     '/submenus/{submenu_id}',
+    responses={404: {'model': Message404}},
     response_model=SubmenuGet,
     summary='Обновить подменю',
     response_description='Обновленное подменю',
@@ -75,7 +83,12 @@ def update_submenu(
     menu_id: int,
     submenu_id: int,
     request: Request,
-    submenu: SubmenuUpdate,
+    submenu: SubmenuUpdate = Body(
+        example={
+            'title': 'Submenu 1 updated',
+            'description': 'Submenu 1 description updated',
+        },
+    ),
     submenu_service: SubmenuService = Depends(
         get_submenu_service,
     ),
@@ -91,6 +104,7 @@ def update_submenu(
 
 @router.delete(
     '/submenus/{submenu_id}',
+    responses={404: {'model': Message404}, 200: {'model': MessageDeleted}},
     summary='Удалить подменю',
 )
 def delete_submenu(

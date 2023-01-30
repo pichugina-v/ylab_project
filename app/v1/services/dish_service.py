@@ -61,4 +61,4 @@ class DishService:
         self.crud.delete(dish_id=dish_id)
         self.cache.delete_menu_cache(url)
         self.cache.delete(jsonable_encoder(url))
-        return {'message': 'The dish has been deleted'}
+        return {'status': 'true', 'message': 'The menu has been deleted'}
