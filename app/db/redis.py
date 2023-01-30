@@ -7,11 +7,12 @@ load_dotenv()
 
 
 def create_redis():
-    redis.ConnectionPool(
-        host=f'{os.getenv("REDIS_HOST")}',
+    redis_conn = redis.ConnectionPool(
+        host=f'{os.getenv("REDIS_SERVICE")}',
         port=os.getenv('REDIS_PORT'),
         db=os.getenv('REDIS_DB'),
     )
+    return redis_conn
 
 
 pool = create_redis()

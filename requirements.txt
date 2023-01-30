@@ -31,7 +31,6 @@ mypy-extensions==0.4.3
 nodeenv==1.7.0
 orjson==3.8.5
 packaging==23.0
-pkg_resources==0.0.0
 platformdirs==2.6.2
 pluggy==1.0.0
 pre-commit==3.0.1
