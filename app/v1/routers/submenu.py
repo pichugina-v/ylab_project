@@ -51,6 +51,7 @@ def read_submenu(
 )
 def create_submenu(
     menu_id: int,
+    request: Request,
     submenu: SubmenuCreate,
     submenu_service: SubmenuService = Depends(
         get_submenu_service,
@@ -59,6 +60,7 @@ def create_submenu(
     """Создать подменю"""
     return submenu_service.create_submenu(
         menu_id=menu_id,
+        url=request.url._url,
         submenu=submenu,
     )
 

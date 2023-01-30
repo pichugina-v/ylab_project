@@ -12,7 +12,9 @@ router = APIRouter()
     summary='Получить список меню',
     response_description='Список всех меню',
 )
-def read_menus(menu_service: MenuService = Depends(get_menu_service)):
+def read_menus(
+    menu_service: MenuService = Depends(get_menu_service),
+):
     """Получить список всех меню"""
     return menu_service.get_menus()
 

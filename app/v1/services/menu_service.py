@@ -14,25 +14,23 @@ class MenuService:
     def get_menus(self):
         # cached_data = self.cache.getall(url)
         # print('cached_list', cached_data, url)
-        # if cached_data:
+        # if cached_data is not None:
         #     db_menus = cached_data
         # else:
-        #     db_menus = self.crud.get(self.crud.get_list())
-        #     print("new_cache_list", jsonable_encoder(db_menus))
+        #     db_menus = self.crud.get_list()
+        #     print('new_cache_list', jsonable_encoder(db_menus))
         #     cached_data = self.cache.set(url, jsonable_encoder(db_menus))
         # return db_menus
         return self.crud.get_list()
 
     def get_menu(self, menu_id: int, url):
         cached_data = self.cache.get(url)
-        print('cached', cached_data, url)
         if cached_data:
             db_menu = cached_data
         else:
             db_menu = self.crud.get(menu_id)
             if db_menu is None:
                 raise HTTPException(status_code=404, detail='menu not found')
-            print('new_cache', jsonable_encoder(db_menu))
             cached_data = self.cache.set(url, jsonable_encoder(db_menu))
         return db_menu
 
@@ -49,12 +47,9 @@ class MenuService:
         db_menu = self.crud.get(menu_id=menu_id)
         if db_menu is None:
             raise HTTPException(status_code=404, detail='menu not found')
-        self.cache.delete(jsonable_encoder(url))
-        print('deleted_update', url)
-        return self.crud.update(
-            menu=menu,
-            menu_id=menu_id,
-        )
+        updated_menu = self.crud.update(menu=menu, menu_id=menu_id)
+        self.cache.set(url, jsonable_encoder(updated_menu))
+        return updated_menu
 
     def delete_menu(self, menu_id: int, url):
         db_menu = self.crud.get(menu_id=menu_id)
@@ -62,5 +57,4 @@ class MenuService:
             raise HTTPException(status_code=404, detail='menu not found')
         self.crud.delete(menu_id=menu_id)
         self.cache.delete(jsonable_encoder(url))
-        print('deleted', url)
         return {'message': 'The menu has been deleted'}

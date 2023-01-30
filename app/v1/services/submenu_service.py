@@ -27,13 +27,14 @@ class SubmenuService:
             cached_data = self.cache.set(url, jsonable_encoder(db_submenu))
         return db_submenu
 
-    def create_submenu(self, menu_id: int, submenu: SubmenuCreate):
+    def create_submenu(self, menu_id: int, url, submenu: SubmenuCreate):
         db_submenu = self.crud.get_by_title(title=submenu.title)
         if db_submenu:
             raise HTTPException(
                 status_code=400,
                 detail='submenu with this title already exist',
             )
+        self.cache.set_submenus_to_menu(url)
         return self.crud.create(
             submenu=submenu,
             menu_id=menu_id,
@@ -58,5 +59,6 @@ class SubmenuService:
         if db_submenu is None:
             raise HTTPException(status_code=404, detail='submenu not found')
         self.crud.delete(submenu_id=submenu_id)
+        self.cache.delete_menu_cache(url)
         self.cache.delete(jsonable_encoder(url))
         return {'message': 'The submenu has been deleted'}

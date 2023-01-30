@@ -45,12 +45,14 @@ def read_dish(
 )
 def create_dish(
     submenu_id: int,
+    request: Request,
     dish: DishCreate,
     dish_service: DishService = Depends(get_dish_service),
 ):
     """Создать блюдо"""
     return dish_service.create_dish(
         submenu_id=submenu_id,
+        url=request.url._url,
         dish=dish,
     )
 
