@@ -7,7 +7,7 @@ from ..schemas.dish import DishCreate, DishUpdate
 class DishCrud:
     def __init__(self, db: Session):
         self.db = db
-    
+
     def get(self, dish_id: int):
         db_dish = self.db.query(Dish).filter(Dish.id == dish_id).first()
         if db_dish is None:
@@ -28,7 +28,8 @@ class DishCrud:
             title=dish.title,
             description=dish.description,
             price=dish.price,
-            submenu_id=submenu_id)
+            submenu_id=submenu_id,
+        )
         self.db.add(db_dish)
         self.db.commit()
         self.db.refresh(db_dish)

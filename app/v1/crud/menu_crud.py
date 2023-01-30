@@ -1,12 +1,13 @@
 from sqlalchemy.orm import Session
 
-from ..models.models import Menu, Submenu
+from ..models.models import Menu
 from ..schemas.menu import MenuCreate, MenuUpdate
+
 
 class MenuCrud:
     def __init__(self, db: Session):
         self.db = db
-    
+
     def get(self, menu_id: int):
         db_menu = self.db.query(Menu).filter(Menu.id == menu_id).first()
         if db_menu is None:

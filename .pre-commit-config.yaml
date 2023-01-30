@@ -15,7 +15,8 @@ repos:
   rev: v0.991
   hooks:
   -   id: mypy
-      additional_dependencies: [types-redis]
+      additional_dependencies: [types-redis, alembic]
+      exclude: ^alembic/
 
 - repo: https://github.com/pre-commit/mirrors-autopep8
   rev: v2.0.1
@@ -32,6 +33,7 @@ repos:
   rev: 6.0.0
   hooks:
   -    id: flake8
+       args: ['--extend-exclude=*/__init__.py,*alembic*,*/conftest.py*']
 
 - repo: https://github.com/asottile/add-trailing-comma
   rev: v2.4.0
