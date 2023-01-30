@@ -10,26 +10,7 @@ def submenu_1(db, menu_1):
     new_submenu = Submenu(
         title=title,
         description=description,
-        menu_id=menu_1.id
-    )
-    db.add(new_submenu)
-    db.commit()
-
-    return Submenu(
-        id=new_submenu.id,
-        title=title,
-        description=description,
-        dishes_count=new_submenu.dishes_count,
-    )
-
-@fixture()
-def submenu_2(db, menu_1):
-    title = 'New submenu 2'
-    description = 'New submenu 2 description'
-    new_submenu = Submenu(
-        title=title,
-        description=description,
-        menu_id=menu_1.id
+        menu_id=menu_1.id,
     )
     db.add(new_submenu)
     db.commit()

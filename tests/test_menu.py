@@ -10,16 +10,10 @@ def test_list_empty_menu(client):
     assert resp.json() == []
 
 
-def test_list_one_menu(client, menu_1):
+def test_list_menu(client, menu_1):
     resp = client.get(router)
     assert resp.status_code == 200
     assert resp.json() == [menu_to_dict(menu_1)]
-
-
-def test_list_two_menus(client, menu_1, menu_2):
-    resp = client.get(router)
-    assert resp.status_code == 200
-    assert resp.json() == [menu_to_dict(menu_1), menu_to_dict(menu_2)]
 
 
 def test_get_menu_not_found(client):

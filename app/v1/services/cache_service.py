@@ -1,55 +1,29 @@
 import json
 
+from fastapi.encoders import jsonable_encoder
+
 
 class CacheService():
     def __init__(self, cache):
         self.cache = cache
 
-    def get(self, url):
-        value = self.cache.get(url)
-        return json.loads(value) if value else value
+    def set_all(self, list_name, data):
+        data = [value.__dict__ for value in data]
+        for value in data:
+            value.pop('_sa_instance_state', None)
+        data = json.dumps(jsonable_encoder(data))
+        return self.cache.set(list_name, data)
 
-    # def getall(self, url):
-    #     values = self.cache.keys(f'{url}*')
-    #     print('GETALL', [value.decode('utf-8') for value in  values])
-    #     return [json.loads(value) if value else value for value in values]
+    def get(self, name):
+        value = self.cache.get(name)
+        return json.loads(value) if value else None
 
-    def set(self, url, value):
-        return self.cache.set(url, json.dumps(value))
+    def set(self, name, value):
+        value = jsonable_encoder(value)
+        return self.cache.set(name, json.dumps(value))
 
-    def delete(self, url):
-        keys = self.cache.keys(f'{url}*')
+    def delete(self, name):
+        keys = self.cache.keys(f'{name}*')
         if keys:
             for key in keys:
                 self.cache.delete(key)
-
-    def delete_menu_cache(self, url):
-        url = url.split('/submenus')[0]
-        self.cache.delete(url)
-
-    def set_dishes_to_submenu(self, url):
-        url = url.split('/dishes')[0]
-        try:
-            value = json.loads(self.cache.get(url))
-            value['dishes_count'] += 1
-            self.cache.set(url, json.dumps(value))
-        except TypeError:
-            pass
-
-    def set_dishes_to_menu(self, url):
-        url = url.split('/submenus')[0]
-        try:
-            value = json.loads(self.cache.get(url))
-            value['dishes_count'] += 1
-            self.cache.set(url, json.dumps(value))
-        except TypeError:
-            pass
-
-    def set_submenus_to_menu(self, url):
-        url = url.split('/submenus')[0]
-        try:
-            value = json.loads(self.cache.get(url))
-            value['submenus_count'] += 1
-            self.cache.set(url, json.dumps(value))
-        except TypeError:
-            pass

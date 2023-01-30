@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -15,8 +15,7 @@ class DishCreate(DishBase):
 
 
 class DishUpdate(DishBase):
-    description: Union[str, None] = None
-    price: Union[str, None] = None
+    pass
 
 
 class DishInDB(DishBase):
@@ -27,3 +26,5 @@ class DishInDB(DishBase):
 
 class DishGet(DishInDB):
     id: str
+    description: str
+    price: str

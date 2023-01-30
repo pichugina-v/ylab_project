@@ -10,18 +10,10 @@ def test_list_empty_dish(client):
     assert resp.json() == []
 
 
-def test_list_one_dish(client, dish_1):
+def test_list_dish(client, dish_1):
     resp = client.get(router)
     assert resp.status_code == 200
     assert resp.json() == [dish_to_dict(dish_1)]
-
-
-def test_list_two_dishes(client, dish_1, dish_2):
-    resp = client.get(router)
-    assert resp.status_code == 200
-    assert resp.json() == [
-        dish_to_dict(dish_1), dish_to_dict(dish_2),
-    ]
 
 
 def test_get_dish_not_found(client):

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends, Request
+from fastapi import APIRouter, Body, Depends
 
 from ..dependencies import get_submenu_service
 from ..schemas.error_message import Message404, MessageDeleted
@@ -32,7 +32,6 @@ def read_submenus(
 )
 def read_submenu(
     submenu_id: int,
-    request: Request,
     submenu_service: SubmenuService = Depends(
         get_submenu_service,
     ),
@@ -40,7 +39,6 @@ def read_submenu(
     """Получить детальную информацию о подменю"""
     return submenu_service.get_submenu(
         submenu_id=submenu_id,
-        url=request.url._url,
     )
 
 
@@ -53,7 +51,6 @@ def read_submenu(
 )
 def create_submenu(
     menu_id: int,
-    request: Request,
     submenu: SubmenuCreate = Body(
         example={
             'title': 'Submenu 1',
@@ -67,7 +64,6 @@ def create_submenu(
     """Создать подменю"""
     return submenu_service.create_submenu(
         menu_id=menu_id,
-        url=request.url._url,
         submenu=submenu,
     )
 
@@ -82,7 +78,6 @@ def create_submenu(
 def update_submenu(
     menu_id: int,
     submenu_id: int,
-    request: Request,
     submenu: SubmenuUpdate = Body(
         example={
             'title': 'Submenu 1 updated',
@@ -97,7 +92,6 @@ def update_submenu(
     return submenu_service.update_submenu(
         menu_id=menu_id,
         submenu_id=submenu_id,
-        url=request.url._url,
         submenu=submenu,
     )
 
@@ -108,14 +102,14 @@ def update_submenu(
     summary='Удалить подменю',
 )
 def delete_submenu(
+    menu_id: int,
     submenu_id: int,
-    request: Request,
     submenu_service: SubmenuService = Depends(
         get_submenu_service,
     ),
 ):
     """Удалить подменю"""
     return submenu_service.delete_submenu(
+        menu_id=menu_id,
         submenu_id=submenu_id,
-        url=request.url._url,
     )

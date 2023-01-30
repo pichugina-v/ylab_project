@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends, Request
+from fastapi import APIRouter, Body, Depends
 
 from ..dependencies import get_menu_service
 from ..schemas.error_message import Message404, MessageDeleted
@@ -28,13 +28,11 @@ def read_menus(
 )
 def read_menu(
     menu_id: int,
-    request: Request,
     menu_service: MenuService = Depends(get_menu_service),
 ):
     """Получить детальную информацию о меню"""
     return menu_service.get_menu(
         menu_id=menu_id,
-        url=request.url._url,
     )
 
 
@@ -65,7 +63,6 @@ def create_menu(
 )
 def update_menu(
     menu_id: int,
-    request: Request,
     menu: MenuUpdate = Body(
         example={
             'title': 'Menu 1 updated',
@@ -77,7 +74,6 @@ def update_menu(
     """Изменить меню"""
     return menu_service.update_menu(
         menu_id=menu_id,
-        url=request.url._url,
         menu=menu,
     )
 
@@ -89,11 +85,9 @@ def update_menu(
 )
 def delete_menu(
     menu_id: int,
-    request: Request,
     menu_service: MenuService = Depends(get_menu_service),
 ):
     """Удалить меню"""
     return menu_service.delete_menu(
         menu_id=menu_id,
-        url=request.url._url,
     )

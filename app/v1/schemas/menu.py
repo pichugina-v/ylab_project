@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -13,7 +13,7 @@ class MenuCreate(MenuBase):
 
 
 class MenuUpdate(MenuBase):
-    description: Union[str, None] = None
+    pass
 
 
 class MenuInDB(MenuBase):
@@ -25,4 +25,5 @@ class MenuInDB(MenuBase):
 class MenuGet(MenuInDB):
     submenus_count: int
     dishes_count: int
+    description: str
     id: str

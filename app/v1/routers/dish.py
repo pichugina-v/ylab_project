@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends, Request
+from fastapi import APIRouter, Body, Depends
 
 from ..dependencies import get_dish_service
 from ..schemas.dish import DishCreate, DishGet, DishUpdate
@@ -14,7 +14,9 @@ router = APIRouter()
     summary='Получить список блюд',
     response_description='Список всех блюд',
 )
-def read_dishes(dish_service: DishService = Depends(get_dish_service)):
+def read_dishes(
+    dish_service: DishService = Depends(get_dish_service),
+):
     """Получить список всех блюд"""
     return dish_service.get_dishes()
 
@@ -28,13 +30,11 @@ def read_dishes(dish_service: DishService = Depends(get_dish_service)):
 )
 def read_dish(
     dish_id: int,
-    request: Request,
     dish_service: DishService = Depends(get_dish_service),
 ):
     """Получить детальную информацию о блюде"""
     return dish_service.get_dish(
         dish_id=dish_id,
-        url=request.url._url,
     )
 
 
@@ -46,8 +46,8 @@ def read_dish(
     status_code=201,
 )
 def create_dish(
+    menu_id: int,
     submenu_id: int,
-    request: Request,
     dish: DishCreate = Body(
         example={
             'title': 'Dish 1',
@@ -58,8 +58,8 @@ def create_dish(
 ):
     """Создать блюдо"""
     return dish_service.create_dish(
+        menu_id=menu_id,
         submenu_id=submenu_id,
-        url=request.url._url,
         dish=dish,
     )
 
@@ -74,7 +74,6 @@ def create_dish(
 def update_dish(
     submenu_id: int,
     dish_id: int,
-    request: Request,
     dish: DishUpdate = Body(
         example={
             'title': 'Dish 1 updated',
@@ -86,7 +85,6 @@ def update_dish(
     """Изменить блюдо"""
     return dish_service.update_dish(
         submenu_id=submenu_id,
-        url=request.url._url,
         dish_id=dish_id,
         dish=dish,
     )
@@ -98,12 +96,14 @@ def update_dish(
     summary='Удалить блюдо',
 )
 def delete_dish(
+    menu_id: int,
+    submenu_id: int,
     dish_id: int,
-    request: Request,
     dish_service: DishService = Depends(get_dish_service),
 ):
     """Удалить блюдо"""
     return dish_service.delete_dish(
+        menu_id=menu_id,
+        submenu_id=submenu_id,
         dish_id=dish_id,
-        url=request.url._url,
     )
