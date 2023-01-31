@@ -1,6 +1,44 @@
 version: '3.8'
 
 services:
+  test_db:
+    container_name: test_db
+    image: postgres:15.1-alpine
+    volumes:
+      - ./psql_test:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=${TEST_POSTGRES_DB}
+      - POSTGRES_PASSWORD=${TEST_POSTGRES_PASSWORD}
+      - POSTGRES_USER=${TEST_POSTGRES_USER}
+    env_file:
+      - .env
+    networks:
+      - test_network
+    expose:
+      - "5432"
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${TEST_POSTGRES_USER} -d ${TEST_POSTGRES_DB}'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  web_app_redis:
+    container_name: web_app_redis
+    image: redis:latest
+    env_file:
+      - .env
+    networks:
+      - test_network
+    expose:
+      - 6379
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
   test_web_app:
     container_name: test_web_app
     build:
@@ -14,5 +52,4 @@ services:
 
 networks:
   test_network:
-    external:
-      name: web_app_network
+      name: test_network
