@@ -4,19 +4,19 @@ router = '/api/v1/menus/1/submenus/1/dishes'
 router_id = 'api/v1/menus/1/submenus/1/dishes/{id}/'
 
 
-def test_list_empty_dish(client):
+def test_list_empty_dish(client, cache):
     resp = client.get(router)
     assert resp.status_code == 200
     assert resp.json() == []
 
 
-def test_list_dish(client, dish_1):
+def test_list_dish(client, dish_1, cache):
     resp = client.get(router)
     assert resp.status_code == 200
     assert resp.json() == [dish_to_dict(dish_1)]
 
 
-def test_get_dish_not_found(client):
+def test_get_dish_not_found(client, cache):
     resp = client.get(
         router_id.format(id=1),
     )
@@ -24,7 +24,7 @@ def test_get_dish_not_found(client):
     assert resp.json() == {'detail': 'dish not found'}
 
 
-def test_get_dish(client, dish_1):
+def test_get_dish(client, dish_1, cache):
     resp = client.get(
         router_id.format(id=1),
     )
@@ -32,7 +32,7 @@ def test_get_dish(client, dish_1):
     assert resp.json() == dish_to_dict(dish_1)
 
 
-def test_create_dish(client, db, submenu_1):
+def test_create_dish(client, db, submenu_1, cache):
     resp = client.post(
         router,
         json={
@@ -50,7 +50,7 @@ def test_create_dish(client, db, submenu_1):
     }
 
 
-def test_update_dish(client, db, dish_1):
+def test_update_dish(client, db, dish_1, cache):
     resp = client.patch(
         router_id.format(id=1),
         json={
@@ -68,7 +68,7 @@ def test_update_dish(client, db, dish_1):
     }
 
 
-def test_update_dish_not_found(client, db):
+def test_update_dish_not_found(client, db, cache):
     resp = client.patch(
         router_id.format(id=1),
         json={
@@ -81,7 +81,7 @@ def test_update_dish_not_found(client, db):
     assert resp.json() == {'detail': 'dish not found'}
 
 
-def test_delete_dish(client, db, dish_1):
+def test_delete_dish(client, db, dish_1, cache):
     resp = client.delete(
         router_id.format(id=1),
     )
@@ -92,7 +92,7 @@ def test_delete_dish(client, db, dish_1):
     }
 
 
-def test_delete_dish_not_found(client):
+def test_delete_dish_not_found(client, cache):
     resp = client.delete(
         router_id.format(id=1),
     )

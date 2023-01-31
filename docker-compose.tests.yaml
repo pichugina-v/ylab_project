@@ -24,8 +24,8 @@ services:
       timeout: 3s
       retries: 3
 
-  web_app_redis:
-    container_name: web_app_redis
+  test_redis:
+    container_name: test_redis
     image: redis:latest
     env_file:
       - .env

@@ -4,19 +4,19 @@ router = '/api/v1/menus/'
 router_id = 'api/v1/menus/{id}/'
 
 
-def test_list_empty_menu(client):
+def test_list_empty_menu(client, cache):
     resp = client.get(router)
     assert resp.status_code == 200
     assert resp.json() == []
 
 
-def test_list_menu(client, menu_1):
+def test_list_menu(client, menu_1, cache):
     resp = client.get(router)
     assert resp.status_code == 200
     assert resp.json() == [menu_to_dict(menu_1)]
 
 
-def test_get_menu_not_found(client):
+def test_get_menu_not_found(client, cache):
     resp = client.get(
         router_id.format(id=1),
     )
@@ -24,7 +24,7 @@ def test_get_menu_not_found(client):
     assert resp.json() == {'detail': 'menu not found'}
 
 
-def test_get_menu(client, menu_1):
+def test_get_menu(client, menu_1, cache):
     resp = client.get(
         router_id.format(id=1),
     )
@@ -32,7 +32,7 @@ def test_get_menu(client, menu_1):
     assert resp.json() == menu_to_dict(menu_1)
 
 
-def test_create_menu(client, db):
+def test_create_menu(client, db, cache):
     resp = client.post(
         router,
         json={'title': 'My menu', 'description': 'My menu description'},
@@ -47,7 +47,7 @@ def test_create_menu(client, db):
     }
 
 
-def test_update_menu(client, db, menu_1):
+def test_update_menu(client, db, menu_1, cache):
     resp = client.patch(
         router_id.format(id=1),
         json={
@@ -65,7 +65,7 @@ def test_update_menu(client, db, menu_1):
     }
 
 
-def test_update_menu_not_found(client, db):
+def test_update_menu_not_found(client, db, cache):
     resp = client.patch(
         router_id.format(id=1),
         json={
@@ -77,7 +77,7 @@ def test_update_menu_not_found(client, db):
     assert resp.json() == {'detail': 'menu not found'}
 
 
-def test_delete_menu(client, db, menu_1):
+def test_delete_menu(client, db, menu_1, cache):
     resp = client.delete(
         router_id.format(id=1),
     )
@@ -88,7 +88,7 @@ def test_delete_menu(client, db, menu_1):
     }
 
 
-def test_delete_menu_not_found(client):
+def test_delete_menu_not_found(client, cache):
     resp = client.delete(
         router_id.format(id=1),
     )
