@@ -27,3 +27,4 @@ alembic upgrade head
 ```bash
 uvicorn main:app --reload
 ```
+* Документация находится по адресу `http://127.0.0.1:8000/api/docs`
