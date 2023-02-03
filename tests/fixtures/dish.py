@@ -1,10 +1,10 @@
-from pytest import fixture
+from pytest_asyncio import fixture
 
 from app.v1.models.models import Dish
 
 
 @fixture()
-def dish_1(db, submenu_1):
+async def dish_1(db, submenu_1):
     title = 'New dish 1'
     description = 'New dish 1 description'
     price = '12.50'
@@ -15,7 +15,8 @@ def dish_1(db, submenu_1):
         submenu_id=submenu_1.id,
     )
     db.add(new_dish)
-    db.commit()
+    await db.commit()
+    await db.refresh(new_dish)
 
     return Dish(
         id=new_dish.id,

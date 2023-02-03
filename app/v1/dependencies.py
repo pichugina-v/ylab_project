@@ -38,11 +38,11 @@ def get_submenu_service(
     return SubmenuService(crud, cache)
 
 
-def get_dish_crud(db: Session = Depends(get_db)):
+async def get_dish_crud(db: Session = Depends(get_db)):
     return DishCrud(db)
 
 
-def get_dish_service(
+async def get_dish_service(
     crud: DishCrud = Depends(get_dish_crud),
     cache: CacheService = Depends(get_cache),
 ):

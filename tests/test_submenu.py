@@ -1,39 +1,46 @@
+from pytest import mark
+
 from tests import submenu_to_dict
 
-router = '/api/v1/menus/1/submenus/'
-router_id = 'api/v1/menus/1/submenus/{id}/'
+router = '/api/v1/menus/1/submenus'
+router_id = 'api/v1/menus/1/submenus/{id}'
 
 
-def test_list_empty_submenu(client, cache):
-    resp = client.get(router)
+@mark.asyncio
+async def test_list_empty_submenu(client):
+    resp = await client.get(router)
     assert resp.status_code == 200
     assert resp.json() == []
 
 
-def test_list_submenu(client, submenu_1, cache):
-    resp = client.get(router)
+@mark.asyncio
+async def test_list_submenu(client, submenu_1):
+    resp = await client.get(router)
     assert resp.status_code == 200
     assert resp.json() == [submenu_to_dict(submenu_1)]
 
 
-def test_get_submenu_not_found(client, cache):
-    resp = client.get(
+@mark.asyncio
+async def test_get_submenu_not_found(client):
+    resp = await client.get(
         router_id.format(id=1),
     )
     assert resp.status_code == 404
     assert resp.json() == {'detail': 'submenu not found'}
 
 
-def test_get_submenu(client, submenu_1, cache):
-    resp = client.get(
+@mark.asyncio
+async def test_get_submenu(client, submenu_1):
+    resp = await client.get(
         router_id.format(id=1),
     )
     assert resp.status_code == 200
     assert resp.json() == submenu_to_dict(submenu_1)
 
 
-def test_create_submenu(client, db, menu_1, cache):
-    resp = client.post(
+@mark.asyncio
+async def test_create_submenu(client, db, menu_1):
+    resp = await client.post(
         router,
         json={'title': 'My submenu', 'description': 'My submenu description'},
     )
@@ -46,8 +53,9 @@ def test_create_submenu(client, db, menu_1, cache):
     }
 
 
-def test_update_submenu(client, db, submenu_1, cache):
-    resp = client.patch(
+@mark.asyncio
+async def test_update_submenu(client, db, submenu_1):
+    resp = await client.patch(
         router_id.format(id=1),
         json={
             'title': 'My updated submenu',
@@ -63,8 +71,9 @@ def test_update_submenu(client, db, submenu_1, cache):
     }
 
 
-def test_update_submenu_not_found(client, db, cache):
-    resp = client.patch(
+@mark.asyncio
+async def test_update_submenu_not_found(client, db):
+    resp = await client.patch(
         router_id.format(id=1),
         json={
             'title': 'My updated submenu',
@@ -75,8 +84,9 @@ def test_update_submenu_not_found(client, db, cache):
     assert resp.json() == {'detail': 'submenu not found'}
 
 
-def test_delete_submenu(client, db, submenu_1, cache):
-    resp = client.delete(
+@mark.asyncio
+async def test_delete_submenu(client, db, submenu_1):
+    resp = await client.delete(
         router_id.format(id=1),
     )
     assert resp.status_code == 200
@@ -86,8 +96,9 @@ def test_delete_submenu(client, db, submenu_1, cache):
     }
 
 
-def test_delete_submenu_not_found(client, cache):
-    resp = client.delete(
+@mark.asyncio
+async def test_delete_submenu_not_found(client):
+    resp = await client.delete(
         router_id.format(id=1),
     )
     assert resp.status_code == 404

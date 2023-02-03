@@ -14,13 +14,13 @@ router = APIRouter()
     summary='Получить список подменю',
     response_description='Список всех подменю',
 )
-def read_submenus(
+async def read_submenus(
     submenu_service: SubmenuService = Depends(
         get_submenu_service,
     ),
 ):
     """Получить список всех подменю"""
-    return submenu_service.get_submenus()
+    return await submenu_service.get_submenus()
 
 
 @router.get(
@@ -30,14 +30,14 @@ def read_submenus(
     summary='Получить детальную информацию о подменю',
     response_description='Детальная информация о подменю',
 )
-def read_submenu(
+async def read_submenu(
     submenu_id: int,
     submenu_service: SubmenuService = Depends(
         get_submenu_service,
     ),
 ):
     """Получить детальную информацию о подменю"""
-    return submenu_service.get_submenu(
+    return await submenu_service.get_submenu(
         submenu_id=submenu_id,
     )
 
@@ -49,7 +49,7 @@ def read_submenu(
     response_description='Созданное подменю',
     status_code=201,
 )
-def create_submenu(
+async def create_submenu(
     menu_id: int,
     submenu: SubmenuCreate = Body(
         example={
@@ -62,7 +62,7 @@ def create_submenu(
     ),
 ):
     """Создать подменю"""
-    return submenu_service.create_submenu(
+    return await submenu_service.create_submenu(
         menu_id=menu_id,
         submenu=submenu,
     )
@@ -75,7 +75,7 @@ def create_submenu(
     summary='Обновить подменю',
     response_description='Обновленное подменю',
 )
-def update_submenu(
+async def update_submenu(
     menu_id: int,
     submenu_id: int,
     submenu: SubmenuUpdate = Body(
@@ -89,7 +89,7 @@ def update_submenu(
     ),
 ):
     """Обновить подменю"""
-    return submenu_service.update_submenu(
+    return await submenu_service.update_submenu(
         menu_id=menu_id,
         submenu_id=submenu_id,
         submenu=submenu,
@@ -101,7 +101,7 @@ def update_submenu(
     responses={404: {'model': Message404}, 200: {'model': MessageDeleted}},
     summary='Удалить подменю',
 )
-def delete_submenu(
+async def delete_submenu(
     menu_id: int,
     submenu_id: int,
     submenu_service: SubmenuService = Depends(
@@ -109,7 +109,7 @@ def delete_submenu(
     ),
 ):
     """Удалить подменю"""
-    return submenu_service.delete_submenu(
+    return await submenu_service.delete_submenu(
         menu_id=menu_id,
         submenu_id=submenu_id,
     )

@@ -24,20 +24,20 @@ services:
       timeout: 3s
       retries: 3
 
-  test_redis:
-    container_name: test_redis
-    image: redis:latest
-    env_file:
-      - .env
-    networks:
-      - test_network
-    expose:
-      - 6379
-    healthcheck:
-      test: ["CMD-SHELL", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 10s
-      retries: 10
+  # test_redis:
+  #   container_name: test_redis
+  #   image: redis:latest
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - test_network
+  #   expose:
+  #     - 6379
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "redis-cli", "ping"]
+  #     interval: 5s
+  #     timeout: 10s
+  #     retries: 10
 
   test_web_app:
     container_name: test_web_app
@@ -52,8 +52,8 @@ services:
     depends_on:
       test_db:
         condition: service_healthy
-      test_redis:
-        condition: service_healthy
+      # test_redis:
+      #   condition: service_healthy
 
 networks:
   test_network:

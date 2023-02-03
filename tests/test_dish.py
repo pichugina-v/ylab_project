@@ -1,39 +1,46 @@
+from pytest import mark
+
 from tests import dish_to_dict
 
 router = '/api/v1/menus/1/submenus/1/dishes'
-router_id = 'api/v1/menus/1/submenus/1/dishes/{id}/'
+router_id = 'api/v1/menus/1/submenus/1/dishes/{id}'
 
 
-def test_list_empty_dish(client, cache):
-    resp = client.get(router)
+@mark.asyncio
+async def test_list_empty_dish(client, cache):
+    resp = await client.get(router)
     assert resp.status_code == 200
     assert resp.json() == []
 
 
-def test_list_dish(client, dish_1, cache):
-    resp = client.get(router)
+@mark.asyncio
+async def test_list_dish(client, dish_1):
+    resp = await client.get(router)
     assert resp.status_code == 200
     assert resp.json() == [dish_to_dict(dish_1)]
 
 
-def test_get_dish_not_found(client, cache):
-    resp = client.get(
+@mark.asyncio
+async def test_get_dish_not_found(client):
+    resp = await client.get(
         router_id.format(id=1),
     )
     assert resp.status_code == 404
     assert resp.json() == {'detail': 'dish not found'}
 
 
-def test_get_dish(client, dish_1, cache):
-    resp = client.get(
+@mark.asyncio
+async def test_get_dish(client, dish_1):
+    resp = await client.get(
         router_id.format(id=1),
     )
     assert resp.status_code == 200
     assert resp.json() == dish_to_dict(dish_1)
 
 
-def test_create_dish(client, db, submenu_1, cache):
-    resp = client.post(
+@mark.asyncio
+async def test_create_dish(client, db, submenu_1):
+    resp = await client.post(
         router,
         json={
             'title': 'My dish',
@@ -50,8 +57,9 @@ def test_create_dish(client, db, submenu_1, cache):
     }
 
 
-def test_update_dish(client, db, dish_1, cache):
-    resp = client.patch(
+@mark.asyncio
+async def test_update_dish(client, db, dish_1):
+    resp = await client.patch(
         router_id.format(id=1),
         json={
             'title': 'My updated dish',
@@ -68,8 +76,9 @@ def test_update_dish(client, db, dish_1, cache):
     }
 
 
-def test_update_dish_not_found(client, db, cache):
-    resp = client.patch(
+@mark.asyncio
+async def test_update_dish_not_found(client, db):
+    resp = await client.patch(
         router_id.format(id=1),
         json={
             'title': 'My updated dish',
@@ -81,8 +90,9 @@ def test_update_dish_not_found(client, db, cache):
     assert resp.json() == {'detail': 'dish not found'}
 
 
-def test_delete_dish(client, db, dish_1, cache):
-    resp = client.delete(
+@mark.asyncio
+async def test_delete_dish(client, db, dish_1):
+    resp = await client.delete(
         router_id.format(id=1),
     )
     assert resp.status_code == 200
@@ -92,8 +102,9 @@ def test_delete_dish(client, db, dish_1, cache):
     }
 
 
-def test_delete_dish_not_found(client, cache):
-    resp = client.delete(
+@mark.asyncio
+async def test_delete_dish_not_found(client):
+    resp = await client.delete(
         router_id.format(id=1),
     )
     assert resp.status_code == 404

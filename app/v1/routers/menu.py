@@ -13,11 +13,11 @@ router = APIRouter()
     summary='Получить список меню',
     response_description='Список всех меню',
 )
-def read_menus(
+async def read_menus(
     menu_service: MenuService = Depends(get_menu_service),
 ):
     """Получить список всех меню"""
-    return menu_service.get_menus()
+    return await menu_service.get_menus()
 
 
 @router.get(
@@ -26,12 +26,12 @@ def read_menus(
     summary='Получить детальную информацию о меню',
     response_description='Детальная информация о меню',
 )
-def read_menu(
+async def read_menu(
     menu_id: int,
     menu_service: MenuService = Depends(get_menu_service),
 ):
     """Получить детальную информацию о меню"""
-    return menu_service.get_menu(
+    return await menu_service.get_menu(
         menu_id=menu_id,
     )
 
@@ -42,7 +42,7 @@ def read_menu(
     response_description='Созданное меню',
     status_code=201,
 )
-def create_menu(
+async def create_menu(
     menu: MenuCreate = Body(
         example={
             'title': 'Menu 1',
@@ -52,7 +52,7 @@ def create_menu(
     menu_service: MenuService = Depends(get_menu_service),
 ):
     """Создать меню"""
-    return menu_service.create_menu(menu=menu)
+    return await menu_service.create_menu(menu=menu)
 
 
 @router.patch(
@@ -61,7 +61,7 @@ def create_menu(
     summary='Изменить меню',
     response_description='Измененное меню',
 )
-def update_menu(
+async def update_menu(
     menu_id: int,
     menu: MenuUpdate = Body(
         example={
@@ -72,7 +72,7 @@ def update_menu(
     menu_service: MenuService = Depends(get_menu_service),
 ):
     """Изменить меню"""
-    return menu_service.update_menu(
+    return await menu_service.update_menu(
         menu_id=menu_id,
         menu=menu,
     )
@@ -83,11 +83,11 @@ def update_menu(
     responses={404: {'model': Message404}, 200: {'model': MessageDeleted}},
     summary='Удалить меню',
 )
-def delete_menu(
+async def delete_menu(
     menu_id: int,
     menu_service: MenuService = Depends(get_menu_service),
 ):
     """Удалить меню"""
-    return menu_service.delete_menu(
+    return await menu_service.delete_menu(
         menu_id=menu_id,
     )

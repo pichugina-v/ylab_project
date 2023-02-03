@@ -1,11 +1,13 @@
+import asyncio
 import os
-from collections.abc import Generator
+from collections.abc import AsyncGenerator, Generator
+from typing import Callable
 
 import redis
 from dotenv import load_dotenv
-from fastapi.testclient import TestClient
-from pytest import fixture
-from sqlalchemy import create_engine
+from httpx import AsyncClient
+from pytest_asyncio import fixture
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.db.database import get_db
@@ -16,54 +18,66 @@ from main import app
 load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = (
-    f'postgresql://{os.getenv("TEST_POSTGRES_USER")}:'
+    f'postgresql+asyncpg://{os.getenv("TEST_POSTGRES_USER")}:'
     f'{os.getenv("TEST_POSTGRES_PASSWORD")}@'
+    # f'{os.getenv("TEST_POSTGRES_HOST")}:'
     f'{os.getenv("TEST_POSTGRES_SERVICE")}/'
     f'{os.getenv("TEST_POSTGRES_DB")}'
 )
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
-TestingSessionLocal = sessionmaker(
-    bind=engine, autocommit=False, autoflush=False,
+engine = create_async_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+async_testing_session = sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
 )
 
 
-@fixture
-def db() -> Generator:
-    Base.metadata.drop_all(bind=engine)
-    Base.metadata.create_all(bind=engine)
-
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+@fixture(scope='session')
+def event_loop() -> Generator:
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
 
 
 @fixture
-def client(db) -> TestClient:
+async def db() -> AsyncGenerator:
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
+
+    async with async_testing_session() as db:
+        try:
+            yield db
+        finally:
+            await db.close()
+
+
+@fixture
+async def client(db) -> AsyncClient:
     def _get_db_override():
         return db
     app.dependency_overrides[get_db] = _get_db_override
-    return TestClient(app)
+    async with AsyncClient(app=app, base_url='http://test') as client:
+        yield client
 
 
-@fixture()
-def redis_pool() -> Generator:
-    pool = redis.ConnectionPool(
-        host=f'{os.getenv("TEST_REDIS_SERVICE")}',
-        port=os.getenv('REDIS_PORT'),
-        db=os.getenv('TEST_REDIS_DB'),
-    )
-    redis_pool = redis.Redis(connection_pool=pool)
-    try:
-        yield redis_pool
-    finally:
-        redis_pool.close()
+# @fixture()
+# def redis_pool() -> Generator:
+#     pool = redis.ConnectionPool(
+#         host=f'{os.getenv("REDIS_HOST")}',
+#         port=os.getenv('REDIS_PORT'),
+#         db=os.getenv('TEST_REDIS_DB'),
+#     )
+#     redis_pool = redis.Redis(connection_pool=pool)
+#     try:
+#         yield redis_pool
+#     finally:
+#         redis_pool.close()
 
 
-@fixture()
-def cache(redis_pool):
-    def _get_redis_override():
-        return redis_pool
-    app.dependency_overrides[get_redis] = _get_redis_override
+# @fixture()
+# def cache(redis_pool):
+#     def _get_redis_override():
+#         return redis_pool
+#     app.dependency_overrides[get_redis] = _get_redis_override

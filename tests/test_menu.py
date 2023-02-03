@@ -1,39 +1,46 @@
+from pytest import mark
+
 from tests import menu_to_dict
 
-router = '/api/v1/menus/'
-router_id = 'api/v1/menus/{id}/'
+router = '/api/v1/menus'
+router_id = 'api/v1/menus/{id}'
 
 
-def test_list_empty_menu(client, cache):
-    resp = client.get(router)
+@mark.asyncio
+async def test_list_empty_menu(client):
+    resp = await client.get(router)
     assert resp.status_code == 200
     assert resp.json() == []
 
 
-def test_list_menu(client, menu_1, cache):
-    resp = client.get(router)
+@mark.asyncio
+async def test_list_menu(client, menu_1):
+    resp = await client.get(router)
     assert resp.status_code == 200
     assert resp.json() == [menu_to_dict(menu_1)]
 
 
-def test_get_menu_not_found(client, cache):
-    resp = client.get(
+@mark.asyncio
+async def test_get_menu_not_found(client):
+    resp = await client.get(
         router_id.format(id=1),
     )
     assert resp.status_code == 404
     assert resp.json() == {'detail': 'menu not found'}
 
 
-def test_get_menu(client, menu_1, cache):
-    resp = client.get(
+@mark.asyncio
+async def test_get_menu(client, menu_1):
+    resp = await client.get(
         router_id.format(id=1),
     )
     assert resp.status_code == 200
     assert resp.json() == menu_to_dict(menu_1)
 
 
-def test_create_menu(client, db, cache):
-    resp = client.post(
+@mark.asyncio
+async def test_create_menu(client, db):
+    resp = await client.post(
         router,
         json={'title': 'My menu', 'description': 'My menu description'},
     )
@@ -47,8 +54,9 @@ def test_create_menu(client, db, cache):
     }
 
 
-def test_update_menu(client, db, menu_1, cache):
-    resp = client.patch(
+@mark.asyncio
+async def test_update_menu(client, db, menu_1):
+    resp = await client.patch(
         router_id.format(id=1),
         json={
             'title': 'My updated menu',
@@ -65,8 +73,9 @@ def test_update_menu(client, db, menu_1, cache):
     }
 
 
-def test_update_menu_not_found(client, db, cache):
-    resp = client.patch(
+@mark.asyncio
+async def test_update_menu_not_found(client, db):
+    resp = await client.patch(
         router_id.format(id=1),
         json={
             'title': 'My updated menu',
@@ -77,8 +86,9 @@ def test_update_menu_not_found(client, db, cache):
     assert resp.json() == {'detail': 'menu not found'}
 
 
-def test_delete_menu(client, db, menu_1, cache):
-    resp = client.delete(
+@mark.asyncio
+async def test_delete_menu(client, db, menu_1):
+    resp = await client.delete(
         router_id.format(id=1),
     )
     assert resp.status_code == 200
@@ -88,8 +98,9 @@ def test_delete_menu(client, db, menu_1, cache):
     }
 
 
-def test_delete_menu_not_found(client, cache):
-    resp = client.delete(
+@mark.asyncio
+async def test_delete_menu_not_found(client):
+    resp = await client.delete(
         router_id.format(id=1),
     )
     assert resp.status_code == 404

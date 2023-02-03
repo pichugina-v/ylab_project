@@ -14,11 +14,11 @@ router = APIRouter()
     summary='Получить список блюд',
     response_description='Список всех блюд',
 )
-def read_dishes(
+async def read_dishes(
     dish_service: DishService = Depends(get_dish_service),
 ):
     """Получить список всех блюд"""
-    return dish_service.get_dishes()
+    return await dish_service.get_dishes()
 
 
 @router.get(
@@ -28,12 +28,12 @@ def read_dishes(
     summary='Получить детальную информацию о блюде',
     response_description='Список всех блюд',
 )
-def read_dish(
+async def read_dish(
     dish_id: int,
     dish_service: DishService = Depends(get_dish_service),
 ):
     """Получить детальную информацию о блюде"""
-    return dish_service.get_dish(
+    return await dish_service.get_dish(
         dish_id=dish_id,
     )
 
@@ -45,7 +45,7 @@ def read_dish(
     response_description='Созданное блюдо',
     status_code=201,
 )
-def create_dish(
+async def create_dish(
     menu_id: int,
     submenu_id: int,
     dish: DishCreate = Body(
@@ -57,7 +57,7 @@ def create_dish(
     dish_service: DishService = Depends(get_dish_service),
 ):
     """Создать блюдо"""
-    return dish_service.create_dish(
+    return await dish_service.create_dish(
         menu_id=menu_id,
         submenu_id=submenu_id,
         dish=dish,
@@ -71,7 +71,7 @@ def create_dish(
     response_description='Измененное блюдо',
     response_model=DishGet,
 )
-def update_dish(
+async def update_dish(
     submenu_id: int,
     dish_id: int,
     dish: DishUpdate = Body(
@@ -83,7 +83,7 @@ def update_dish(
     dish_service: DishService = Depends(get_dish_service),
 ):
     """Изменить блюдо"""
-    return dish_service.update_dish(
+    return await dish_service.update_dish(
         submenu_id=submenu_id,
         dish_id=dish_id,
         dish=dish,
@@ -95,14 +95,14 @@ def update_dish(
     responses={404: {'model': Message404}, 200: {'model': MessageDeleted}},
     summary='Удалить блюдо',
 )
-def delete_dish(
+async def delete_dish(
     menu_id: int,
     submenu_id: int,
     dish_id: int,
     dish_service: DishService = Depends(get_dish_service),
 ):
     """Удалить блюдо"""
-    return dish_service.delete_dish(
+    return await dish_service.delete_dish(
         menu_id=menu_id,
         submenu_id=submenu_id,
         dish_id=dish_id,
