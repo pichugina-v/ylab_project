@@ -18,20 +18,20 @@ services:
       timeout: 3s
       retries: 3
 
-  # web_app_redis:
-  #   container_name: web_app_redis
-  #   image: redis:latest
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - web_app_network
-  #   expose:
-  #     - 6379
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "redis-cli", "ping"]
-  #     interval: 5s
-  #     timeout: 10s
-  #     retries: 10
+  web_app_redis:
+    container_name: web_app_redis
+    image: redis:latest
+    env_file:
+      - .env
+    networks:
+      - web_app_network
+    expose:
+      - 6379
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
 
   web_app:
     container_name: web_app

@@ -7,7 +7,7 @@ load_dotenv()
 
 
 pool = asyncio.ConnectionPool(
-    host=f'{os.getenv("REDIS_SERVICE")}',
+    host=f'{os.getenv("REDIS_HOST")}',
     port=os.getenv('REDIS_PORT'),
     db=os.getenv('REDIS_DB'),
 )

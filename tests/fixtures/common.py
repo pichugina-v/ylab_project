@@ -1,9 +1,8 @@
 import asyncio
 import os
 from collections.abc import AsyncGenerator, Generator
-from typing import Callable
 
-import redis
+from redis import asyncio as redis_asyncio
 from dotenv import load_dotenv
 from httpx import AsyncClient
 from pytest_asyncio import fixture
@@ -20,8 +19,8 @@ load_dotenv()
 SQLALCHEMY_DATABASE_URL = (
     f'postgresql+asyncpg://{os.getenv("TEST_POSTGRES_USER")}:'
     f'{os.getenv("TEST_POSTGRES_PASSWORD")}@'
-    # f'{os.getenv("TEST_POSTGRES_HOST")}:'
-    f'{os.getenv("TEST_POSTGRES_SERVICE")}/'
+    f'{os.getenv("TEST_POSTGRES_HOST")}:'
+    f'{os.getenv("TEST_POSTGRES_PORT")}/'
     f'{os.getenv("TEST_POSTGRES_DB")}'
 )
 
@@ -62,22 +61,22 @@ async def client(db) -> AsyncClient:
         yield client
 
 
-# @fixture()
-# def redis_pool() -> Generator:
-#     pool = redis.ConnectionPool(
-#         host=f'{os.getenv("REDIS_HOST")}',
-#         port=os.getenv('REDIS_PORT'),
-#         db=os.getenv('TEST_REDIS_DB'),
-#     )
-#     redis_pool = redis.Redis(connection_pool=pool)
-#     try:
-#         yield redis_pool
-#     finally:
-#         redis_pool.close()
+@fixture()
+async def redis_pool() -> AsyncGenerator:
+    pool = redis_asyncio.ConnectionPool(
+        host=f'{os.getenv("REDIS_HOST")}',
+        port=os.getenv('REDIS_PORT'),
+        db=os.getenv('TEST_REDIS_DB'),
+    )
+    asynco_redis = await redis_asyncio.Redis(connection_pool=pool)
+    try:
+        yield asynco_redis
+    finally:
+        await asynco_redis.close()
 
 
-# @fixture()
-# def cache(redis_pool):
-#     def _get_redis_override():
-#         return redis_pool
-#     app.dependency_overrides[get_redis] = _get_redis_override
+@fixture()
+def cache(redis_pool):
+    def _get_redis_override():
+        return redis_pool
+    app.dependency_overrides[get_redis] = _get_redis_override

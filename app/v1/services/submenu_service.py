@@ -11,25 +11,25 @@ class SubmenuService:
         self.cache = cache
 
     async def get_submenus(self):
-        # cached_data = self.cache.get('submenu_list')
-        # if cached_data:
-        #     db_submenus = cached_data
-        # else:
-        db_submenus = await self.crud.get_list()
-        # cached_data = self.cache.set_all('submenu_list', db_submenus)
+        cached_data = await self.cache.get('submenu_list')
+        if cached_data:
+            db_submenus = cached_data
+        else:
+            db_submenus = await self.crud.get_list()
+            cached_data = await self.cache.set_all('submenu_list', db_submenus)
         return db_submenus
 
     async def get_submenu(self, submenu_id: int):
-        # cached_data = self.cache.get(f'submenu_{submenu_id}')
-        # if cached_data:
-        #     db_submenu = cached_data
-        # else:
-        db_submenu = await self.crud.get(submenu_id)
-        if db_submenu is None:
-            raise HTTPException(
-                status_code=404, detail='submenu not found',
-            )
-            # cached_data = self.cache.set(f'submenu_{submenu_id}', db_submenu)
+        cached_data = await self.cache.get(f'submenu_{submenu_id}')
+        if cached_data:
+            db_submenu = cached_data
+        else:
+            db_submenu = await self.crud.get(submenu_id)
+            if db_submenu is None:
+                raise HTTPException(
+                    status_code=404, detail='submenu not found',
+                )
+            cached_data = await self.cache.set(f'submenu_{submenu_id}', db_submenu)
         return db_submenu
 
     async def create_submenu(
@@ -43,9 +43,9 @@ class SubmenuService:
                 status_code=400,
                 detail='submenu with this title already exist',
             )
-        # self.cache.delete(f'menu_{menu_id}')
-        # self.cache.delete('submenu_list')
-        # self.cache.delete('menu_list')
+        await self.cache.delete(f'menu_{menu_id}')
+        await self.cache.delete('submenu_list')
+        await self.cache.delete('menu_list')
         return await self.crud.create(
             submenu=submenu,
             menu_id=menu_id,
@@ -64,8 +64,8 @@ class SubmenuService:
             submenu_id=submenu_id,
             menu_id=menu_id,
         )
-        # self.cache.set((f'submenu_{submenu_id}'), updated_submenu)
-        # self.cache.delete('submenu_list')
+        await self.cache.set((f'submenu_{submenu_id}'), updated_submenu)
+        await self.cache.delete('submenu_list')
         return updated_submenu
 
     async def delete_submenu(
@@ -76,9 +76,9 @@ class SubmenuService:
         if db_submenu is None:
             raise HTTPException(status_code=404, detail='submenu not found')
         await self.crud.delete(submenu_id=submenu_id)
-        # self.cache.delete(f'menu_{menu_id}')
-        # self.cache.delete(f'submenu_{submenu_id}')
-        # self.cache.delete('menu_list')
-        # self.cache.delete('submenu_list')
-        # self.cache.delete('dish_list')
+        await self.cache.delete(f'menu_{menu_id}')
+        await self.cache.delete(f'submenu_{submenu_id}')
+        await self.cache.delete('menu_list')
+        await self.cache.delete('submenu_list')
+        await self.cache.delete('dish_list')
         return {'status': 'true', 'message': 'The menu has been deleted'}

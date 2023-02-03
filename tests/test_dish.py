@@ -14,14 +14,14 @@ async def test_list_empty_dish(client, cache):
 
 
 @mark.asyncio
-async def test_list_dish(client, dish_1):
+async def test_list_dish(client, dish_1, cache):
     resp = await client.get(router)
     assert resp.status_code == 200
     assert resp.json() == [dish_to_dict(dish_1)]
 
 
 @mark.asyncio
-async def test_get_dish_not_found(client):
+async def test_get_dish_not_found(client, cache):
     resp = await client.get(
         router_id.format(id=1),
     )
@@ -30,7 +30,7 @@ async def test_get_dish_not_found(client):
 
 
 @mark.asyncio
-async def test_get_dish(client, dish_1):
+async def test_get_dish(client, dish_1, cache):
     resp = await client.get(
         router_id.format(id=1),
     )
@@ -39,7 +39,7 @@ async def test_get_dish(client, dish_1):
 
 
 @mark.asyncio
-async def test_create_dish(client, db, submenu_1):
+async def test_create_dish(client, db, submenu_1, cache):
     resp = await client.post(
         router,
         json={
@@ -58,7 +58,7 @@ async def test_create_dish(client, db, submenu_1):
 
 
 @mark.asyncio
-async def test_update_dish(client, db, dish_1):
+async def test_update_dish(client, db, dish_1, cache):
     resp = await client.patch(
         router_id.format(id=1),
         json={
@@ -77,7 +77,7 @@ async def test_update_dish(client, db, dish_1):
 
 
 @mark.asyncio
-async def test_update_dish_not_found(client, db):
+async def test_update_dish_not_found(client, db, cache):
     resp = await client.patch(
         router_id.format(id=1),
         json={
@@ -91,7 +91,7 @@ async def test_update_dish_not_found(client, db):
 
 
 @mark.asyncio
-async def test_delete_dish(client, db, dish_1):
+async def test_delete_dish(client, db, dish_1, cache):
     resp = await client.delete(
         router_id.format(id=1),
     )
@@ -103,7 +103,7 @@ async def test_delete_dish(client, db, dish_1):
 
 
 @mark.asyncio
-async def test_delete_dish_not_found(client):
+async def test_delete_dish_not_found(client, cache):
     resp = await client.delete(
         router_id.format(id=1),
     )

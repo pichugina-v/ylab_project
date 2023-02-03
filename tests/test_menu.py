@@ -7,21 +7,21 @@ router_id = 'api/v1/menus/{id}'
 
 
 @mark.asyncio
-async def test_list_empty_menu(client):
+async def test_list_empty_menu(client, cache):
     resp = await client.get(router)
     assert resp.status_code == 200
     assert resp.json() == []
 
 
 @mark.asyncio
-async def test_list_menu(client, menu_1):
+async def test_list_menu(client, menu_1, cache):
     resp = await client.get(router)
     assert resp.status_code == 200
     assert resp.json() == [menu_to_dict(menu_1)]
 
 
 @mark.asyncio
-async def test_get_menu_not_found(client):
+async def test_get_menu_not_found(client, cache):
     resp = await client.get(
         router_id.format(id=1),
     )
@@ -30,7 +30,7 @@ async def test_get_menu_not_found(client):
 
 
 @mark.asyncio
-async def test_get_menu(client, menu_1):
+async def test_get_menu(client, menu_1, cache):
     resp = await client.get(
         router_id.format(id=1),
     )
@@ -39,7 +39,7 @@ async def test_get_menu(client, menu_1):
 
 
 @mark.asyncio
-async def test_create_menu(client, db):
+async def test_create_menu(client, db, cache):
     resp = await client.post(
         router,
         json={'title': 'My menu', 'description': 'My menu description'},
@@ -55,7 +55,7 @@ async def test_create_menu(client, db):
 
 
 @mark.asyncio
-async def test_update_menu(client, db, menu_1):
+async def test_update_menu(client, db, menu_1, cache):
     resp = await client.patch(
         router_id.format(id=1),
         json={
@@ -74,7 +74,7 @@ async def test_update_menu(client, db, menu_1):
 
 
 @mark.asyncio
-async def test_update_menu_not_found(client, db):
+async def test_update_menu_not_found(client, db, cache):
     resp = await client.patch(
         router_id.format(id=1),
         json={
@@ -87,7 +87,7 @@ async def test_update_menu_not_found(client, db):
 
 
 @mark.asyncio
-async def test_delete_menu(client, db, menu_1):
+async def test_delete_menu(client, db, menu_1, cache):
     resp = await client.delete(
         router_id.format(id=1),
     )
@@ -99,7 +99,7 @@ async def test_delete_menu(client, db, menu_1):
 
 
 @mark.asyncio
-async def test_delete_menu_not_found(client):
+async def test_delete_menu_not_found(client, cache):
     resp = await client.delete(
         router_id.format(id=1),
     )
