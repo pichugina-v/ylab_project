@@ -15,12 +15,13 @@ router = APIRouter()
     response_description='Список всех подменю',
 )
 async def read_submenus(
+    menu_id: int, 
     submenu_service: SubmenuService = Depends(
         get_submenu_service,
     ),
 ):
     """Получить список всех подменю"""
-    return await submenu_service.get_submenus()
+    return await submenu_service.get_submenus(menu_id)
 
 
 @router.get(
@@ -76,7 +77,6 @@ async def create_submenu(
     response_description='Обновленное подменю',
 )
 async def update_submenu(
-    menu_id: int,
     submenu_id: int,
     submenu: SubmenuUpdate = Body(
         example={
@@ -90,7 +90,6 @@ async def update_submenu(
 ):
     """Обновить подменю"""
     return await submenu_service.update_submenu(
-        menu_id=menu_id,
         submenu_id=submenu_id,
         submenu=submenu,
     )

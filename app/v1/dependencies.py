@@ -10,10 +10,15 @@ from .services.cache_service import CacheService
 from .services.dish_service import DishService
 from .services.menu_service import MenuService
 from .services.submenu_service import SubmenuService
+from .services.db_service import DatabaseService
 
 
 def get_cache(cache=Depends(get_redis)):
     return CacheService(cache)
+
+
+def get_db_service(db=Depends(get_db)):
+    return DatabaseService(db)
 
 
 def get_menu_crud(db: Session = Depends(get_db)):

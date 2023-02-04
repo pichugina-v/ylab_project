@@ -10,12 +10,12 @@ class SubmenuService:
         self.crud = crud
         self.cache = cache
 
-    async def get_submenus(self):
+    async def get_submenus(self, menu_id: int):
         cached_data = await self.cache.get('submenu_list')
         if cached_data:
             db_submenus = cached_data
         else:
-            db_submenus = await self.crud.get_list()
+            db_submenus = await self.crud.get_list(menu_id)
             cached_data = await self.cache.set_all('submenu_list', db_submenus)
         return db_submenus
 
@@ -53,7 +53,6 @@ class SubmenuService:
 
     async def update_submenu(
         self, submenu_id: int,
-        menu_id: int,
         submenu: SubmenuUpdate,
     ):
         db_submenu = await self.crud.get(submenu_id=submenu_id)
@@ -62,7 +61,6 @@ class SubmenuService:
         updated_submenu = await self.crud.update(
             submenu=submenu,
             submenu_id=submenu_id,
-            menu_id=menu_id,
         )
         await self.cache.set((f'submenu_{submenu_id}'), updated_submenu)
         await self.cache.delete('submenu_list')

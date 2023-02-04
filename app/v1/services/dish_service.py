@@ -54,7 +54,6 @@ class DishService:
 
     async def update_dish(
         self, dish_id: int,
-        submenu_id: int,
         dish: DishUpdate,
     ):
         db_dish = await self.crud.get(dish_id=dish_id)
@@ -63,7 +62,6 @@ class DishService:
         updated_dish = await self.crud.update(
             dish=dish,
             dish_id=dish_id,
-            submenu_id=submenu_id,
         )
         await self.cache.set(f'dish_{dish_id}', updated_dish)
         await self.cache.delete('dish_list')

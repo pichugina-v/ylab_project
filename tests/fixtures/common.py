@@ -2,10 +2,10 @@ import asyncio
 import os
 from collections.abc import AsyncGenerator, Generator
 
-from redis import asyncio as redis_asyncio
 from dotenv import load_dotenv
 from httpx import AsyncClient
 from pytest_asyncio import fixture
+from redis import asyncio as redis_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 

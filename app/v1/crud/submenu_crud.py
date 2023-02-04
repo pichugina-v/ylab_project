@@ -25,9 +25,11 @@ class SubmenuCrud:
             return None
         return db_submenu
 
-    async def get_list(self):
+    async def get_list(self, menu_id: int):
         db_submenus = (
-            await self.db.execute(select(Submenu))
+            await self.db.execute(
+                select(Submenu).where(Submenu.menu_id == menu_id)
+            )
         ).scalars().fetchall()
         return db_submenus
 
@@ -42,7 +44,7 @@ class SubmenuCrud:
         await self.db.refresh(new_submenu)
         return new_submenu
 
-    async def update(self, submenu_id: int, menu_id: int, submenu: SubmenuUpdate):
+    async def update(self, submenu_id: int, submenu: SubmenuUpdate):
         db_submenu = await self.db.get(Submenu, submenu_id)
         submenu_data = submenu.dict(exclude_unset=True)
         for key, value in submenu_data.items():

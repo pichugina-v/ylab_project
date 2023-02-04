@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.v1.routers import dish, menu, submenu
+from app.v1.routers import dish, menu, submenu, db
 from docs_info import description, tags_metadata, title
 
 
@@ -14,6 +14,11 @@ def create_app():
         openapi_tags=tags_metadata,
     )
 
+    app.include_router(
+        db.router,
+        prefix='/api/v1/data',
+        tags=['db_data']
+    )
     app.include_router(
         menu.router,
         prefix='/api/v1',
