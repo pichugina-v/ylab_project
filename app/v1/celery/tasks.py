@@ -5,7 +5,6 @@ from .celery import celery
 
 @celery.task
 def form_excel(extracted_data):
-    task_id = celery.current_task.request.id
     workbook = xlwt.Workbook()
     sheet = workbook.add_sheet('Menus')
 
@@ -34,5 +33,6 @@ def form_excel(extracted_data):
                 num3 += 1
                 idx += 1
 
+    task_id = celery.current_task.request.id
     workbook.save(f'./reports/{task_id}.xlsx')
     return task_id

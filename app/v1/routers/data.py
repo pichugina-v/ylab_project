@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import FileResponse
 
 from ..dependencies import get_report_service, get_test_data_service
+from ..schemas.data import TaskDetail, DataTestDetail
 from ..services.report_service import ReportService
 from ..services.test_data_service import DataTestService
 
@@ -16,6 +17,7 @@ TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 )
 async def upload_data(
     test_data_service: DataTestService = Depends(get_test_data_service),
+    responses= {200: {'model': DataTestDetail}}
 ):
     """Загрузить тестовые данные в базу данных"""
     return await test_data_service.upload_data()
@@ -28,6 +30,7 @@ async def upload_data(
 )
 async def request_excel(
     report_service: ReportService = Depends(get_report_service),
+    responses= {200: {'model': TaskDetail}}
 ):
     """Запросить данные из базы данных в формате .xlsx"""
     task_id = await report_service.extract_data_from_db()
