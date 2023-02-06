@@ -27,9 +27,13 @@ class SubmenuService:
             db_submenu = await self.crud.get(submenu_id)
             if db_submenu is None:
                 raise HTTPException(
-                    status_code=404, detail='submenu not found',
+                    status_code=404,
+                    detail='submenu not found',
                 )
-            cached_data = await self.cache.set(f'submenu_{submenu_id}', db_submenu)
+            cached_data = await self.cache.set(
+                f'submenu_{submenu_id}',
+                db_submenu,
+            )
         return db_submenu
 
     async def create_submenu(
@@ -52,7 +56,8 @@ class SubmenuService:
         )
 
     async def update_submenu(
-        self, submenu_id: int,
+        self,
+        submenu_id: int,
         submenu: SubmenuUpdate,
     ):
         db_submenu = await self.crud.get(submenu_id=submenu_id)
@@ -67,7 +72,8 @@ class SubmenuService:
         return updated_submenu
 
     async def delete_submenu(
-        self, menu_id: int,
+        self,
+        menu_id: int,
         submenu_id: int,
     ):
         db_submenu = await self.crud.get(submenu_id=submenu_id)

@@ -53,7 +53,8 @@ class DishService:
         )
 
     async def update_dish(
-        self, dish_id: int,
+        self,
+        dish_id: int,
         dish: DishUpdate,
     ):
         db_dish = await self.crud.get(dish_id=dish_id)
@@ -68,8 +69,10 @@ class DishService:
         return updated_dish
 
     async def delete_dish(
-            self, menu_id: int,
-            submenu_id: int, dish_id: int,
+        self,
+        menu_id: int,
+        submenu_id: int,
+        dish_id: int,
     ):
         db_dish = await self.crud.get(dish_id=dish_id)
         if db_dish is None:

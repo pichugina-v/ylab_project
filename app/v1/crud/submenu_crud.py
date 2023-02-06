@@ -1,12 +1,12 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import Session
 
 from ..models.models import Submenu
 from ..schemas.submenu import SubmenuCreate, SubmenuUpdate
 
 
 class SubmenuCrud:
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
 
     async def get(self, submenu_id: int):
@@ -17,20 +17,28 @@ class SubmenuCrud:
 
     async def get_by_title(self, title: str):
         db_submenu = (
-            await self.db.execute(
-                select(Submenu).where(Submenu.title == title),
+            (
+                await self.db.execute(
+                    select(Submenu).where(Submenu.title == title),
+                )
             )
-        ).scalars().first()
+            .scalars()
+            .first()
+        )
         if db_submenu is None:
             return None
         return db_submenu
 
     async def get_list(self, menu_id: int):
         db_submenus = (
-            await self.db.execute(
-                select(Submenu).where(Submenu.menu_id == menu_id)
+            (
+                await self.db.execute(
+                    select(Submenu).where(Submenu.menu_id == menu_id),
+                )
             )
-        ).scalars().fetchall()
+            .scalars()
+            .fetchall()
+        )
         return db_submenus
 
     async def create(self, menu_id: int, submenu: SubmenuCreate):

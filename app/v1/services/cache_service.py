@@ -3,7 +3,7 @@ import json
 from fastapi.encoders import jsonable_encoder
 
 
-class CacheService():
+class CacheService:
     def __init__(self, cache):
         self.cache = cache
 

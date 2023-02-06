@@ -19,7 +19,6 @@ class DishUpdate(DishBase):
 
 
 class DishInDB(DishBase):
-
     class Config:
         orm_mode = True
 

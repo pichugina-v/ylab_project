@@ -19,8 +19,7 @@ load_dotenv()
 SQLALCHEMY_DATABASE_URL = (
     f'postgresql+asyncpg://{os.getenv("TEST_POSTGRES_USER")}:'
     f'{os.getenv("TEST_POSTGRES_PASSWORD")}@'
-    f'{os.getenv("TEST_POSTGRES_HOST")}:'
-    f'{os.getenv("TEST_POSTGRES_PORT")}/'
+    f'{os.getenv("TEST_POSTGRES_SERVICE")}/'
     f'{os.getenv("TEST_POSTGRES_DB")}'
 )
 
@@ -56,6 +55,7 @@ async def db() -> AsyncGenerator:
 async def client(db) -> AsyncClient:
     def _get_db_override():
         return db
+
     app.dependency_overrides[get_db] = _get_db_override
     async with AsyncClient(app=app, base_url='http://test') as client:
         yield client
@@ -64,7 +64,7 @@ async def client(db) -> AsyncClient:
 @fixture()
 async def redis_pool() -> AsyncGenerator:
     pool = redis_asyncio.ConnectionPool(
-        host=f'{os.getenv("REDIS_HOST")}',
+        host=f'{os.getenv("TEST_REDIS_SERVICE")}',
         port=os.getenv('REDIS_PORT'),
         db=os.getenv('TEST_REDIS_DB'),
     )
@@ -79,4 +79,5 @@ async def redis_pool() -> AsyncGenerator:
 def cache(redis_pool):
     def _get_redis_override():
         return redis_pool
+
     app.dependency_overrides[get_redis] = _get_redis_override

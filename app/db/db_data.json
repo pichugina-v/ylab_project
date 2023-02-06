@@ -3,12 +3,12 @@
         "menu1": {
             "id": 1,
             "title": "Меню",
-            "description": "Основное меню" 
+            "description": "Основное меню"
         },
         "menu2": {
             "id": 2,
             "title": "Алкогольное меню",
-            "description": "Алкогольные напитки" 
+            "description": "Алкогольные напитки"
         }
     },
     "submenus": {

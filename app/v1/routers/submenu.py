@@ -15,7 +15,7 @@ router = APIRouter()
     response_description='Список всех подменю',
 )
 async def read_submenus(
-    menu_id: int, 
+    menu_id: int,
     submenu_service: SubmenuService = Depends(
         get_submenu_service,
     ),

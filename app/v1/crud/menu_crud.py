@@ -1,12 +1,12 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import Session
 
 from ..models.models import Menu
 from ..schemas.menu import MenuCreate, MenuUpdate
 
 
 class MenuCrud:
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
 
     async def get(self, menu_id: int):
@@ -17,18 +17,20 @@ class MenuCrud:
 
     async def get_by_title(self, title: str):
         db_menu = (
-            await self.db.execute(
-                select(Menu).where(Menu.title == title),
+            (
+                await self.db.execute(
+                    select(Menu).where(Menu.title == title),
+                )
             )
-        ).scalars().first()
+            .scalars()
+            .first()
+        )
         if not db_menu:
             return None
         return db_menu
 
     async def get_list(self):
-        db_menus = (
-            await self.db.execute(select(Menu))
-        ).scalars().fetchall()
+        db_menus = (await self.db.execute(select(Menu))).scalars().fetchall()
         return db_menus
 
     async def create(self, menu: MenuCreate):

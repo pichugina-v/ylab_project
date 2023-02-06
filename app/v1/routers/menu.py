@@ -9,7 +9,8 @@ router = APIRouter()
 
 
 @router.get(
-    '/menus', response_model=list[MenuGet],
+    '/menus',
+    response_model=list[MenuGet],
     summary='Получить список меню',
     response_description='Список всех меню',
 )
@@ -21,7 +22,8 @@ async def read_menus(
 
 
 @router.get(
-    '/menus/{menu_id}', response_model=MenuGet,
+    '/menus/{menu_id}',
+    response_model=MenuGet,
     responses={404: {'model': Message404}},
     summary='Получить детальную информацию о меню',
     response_description='Детальная информация о меню',
@@ -37,7 +39,8 @@ async def read_menu(
 
 
 @router.post(
-    '/menus', response_model=MenuGet,
+    '/menus',
+    response_model=MenuGet,
     summary='Создать меню',
     response_description='Созданное меню',
     status_code=201,
@@ -56,7 +59,8 @@ async def create_menu(
 
 
 @router.patch(
-    '/menus/{menu_id}', response_model=MenuGet,
+    '/menus/{menu_id}',
+    response_model=MenuGet,
     responses={404: {'model': Message404}},
     summary='Изменить меню',
     response_description='Измененное меню',

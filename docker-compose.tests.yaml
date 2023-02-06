@@ -52,8 +52,8 @@ services:
     depends_on:
       test_db:
         condition: service_healthy
-      # test_redis:
-      #   condition: service_healthy
+      test_redis:
+        condition: service_healthy
 
 networks:
   test_network:

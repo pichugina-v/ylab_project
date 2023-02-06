@@ -1,12 +1,12 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import Session
 
 from ..models.models import Dish
 from ..schemas.dish import DishCreate, DishUpdate
 
 
 class DishCrud:
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
 
     async def get(self, dish_id: int):
@@ -17,18 +17,20 @@ class DishCrud:
 
     async def get_by_title(self, title: str):
         db_dish = (
-            await self.db.execute(
-                select(Dish).where(Dish.title == title),
+            (
+                await self.db.execute(
+                    select(Dish).where(Dish.title == title),
+                )
             )
-        ).scalars().first()
+            .scalars()
+            .first()
+        )
         if db_dish is None:
             return None
         return db_dish
 
     async def get_list(self):
-        db_dishes = (
-            await self.db.execute(select(Dish))
-        ).scalars().fetchall()
+        db_dishes = (await self.db.execute(select(Dish))).scalars().fetchall()
         return db_dishes
 
     async def create(self, submenu_id: int, dish: DishCreate):

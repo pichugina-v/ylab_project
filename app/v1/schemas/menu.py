@@ -17,7 +17,6 @@ class MenuUpdate(MenuBase):
 
 
 class MenuInDB(MenuBase):
-
     class Config:
         orm_mode = True
 

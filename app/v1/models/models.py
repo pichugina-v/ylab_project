@@ -12,8 +12,10 @@ class Dish(Base):
     description = Column(String(1000))
     submenu_id: Column = Column(
         ForeignKey(
-            'submenus.id', ondelete='CASCADE',
-        ), nullable=False,
+            'submenus.id',
+            ondelete='CASCADE',
+        ),
+        nullable=False,
     )
     submenus = relationship('Submenu', back_populates='dishes')
     price = Column(String(50))
@@ -27,13 +29,17 @@ class Submenu(Base):
     description = Column(String(1000))
     menu_id: Column = Column(
         ForeignKey(
-            'menus.id', ondelete='CASCADE',
-        ), nullable=False,
+            'menus.id',
+            ondelete='CASCADE',
+        ),
+        nullable=False,
     )
     menu = relationship('Menu', back_populates='submenus')
     dishes = relationship(
-        'Dish', back_populates='submenus',
-        cascade='all, delete', passive_deletes=True,
+        'Dish',
+        back_populates='submenus',
+        cascade='all, delete',
+        passive_deletes=True,
     )
     dishes_count: MapperProperty = column_property(
         select(func.count(Dish.id))
@@ -50,8 +56,10 @@ class Menu(Base):
     title = Column(String(200), unique=True)
     description = Column(String(1000))
     submenus = relationship(
-        'Submenu', back_populates='menu',
-        cascade='all, delete', passive_deletes=True,
+        'Submenu',
+        back_populates='menu',
+        cascade='all, delete',
+        passive_deletes=True,
     )
     submenus_count: MapperProperty = column_property(
         select(func.count(Submenu.id))
