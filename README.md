@@ -13,6 +13,6 @@ docker-compose -f "docker-compose.tests.yaml" up
 ```
 * Документация доступна по адресу `http://127.0.0.1:8000/api/docs`
 * Эндпоинты для работы с данными:
-  - загрузить тестовые данные в базу данных: `GET` запрос на `/api/v1/docs/data/upload`
-  - сформировать отчет: `POST` запрос на `/api/v1/docs/data/request`
-  - получить отчет: `GET` запрос на `/api/v1/docs/data/get`
+  - загрузить тестовые данные в базу данных: `GET` запрос на `/api/v1/data/upload`
+  - сформировать отчет: `POST` запрос на `/api/v1/data/request`
+  - получить отчет: `GET` запрос на `/api/v1/data/get/<task_id>`
