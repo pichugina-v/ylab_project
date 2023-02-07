@@ -17,7 +17,7 @@ def create_app():
     app.include_router(
         data.router,
         prefix='/api/v1/data',
-        tags=['db_data'],
+        tags=['data'],
     )
     app.include_router(
         menu.router,

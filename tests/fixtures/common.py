@@ -16,14 +16,7 @@ from main import app
 
 load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = (
-    f'postgresql+asyncpg://{os.getenv("TEST_POSTGRES_USER")}:'
-    f'{os.getenv("TEST_POSTGRES_PASSWORD")}@'
-    f'{os.getenv("TEST_POSTGRES_SERVICE")}/'
-    f'{os.getenv("TEST_POSTGRES_DB")}'
-)
-
-engine = create_async_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+engine = create_async_engine(os.getenv('TEST_POSTGRES_URL'), echo=True)
 async_testing_session = sessionmaker(
     bind=engine,
     class_=AsyncSession,
@@ -63,10 +56,8 @@ async def client(db) -> AsyncClient:
 
 @fixture()
 async def redis_pool() -> AsyncGenerator:
-    pool = redis_asyncio.ConnectionPool(
-        host=f'{os.getenv("TEST_REDIS_SERVICE")}',
-        port=os.getenv('REDIS_PORT'),
-        db=os.getenv('TEST_REDIS_DB'),
+    pool = redis_asyncio.ConnectionPool.from_url(
+        str(os.getenv('TEST_REDIS_URL')),
     )
     asynco_redis = await redis_asyncio.Redis(connection_pool=pool)
     try:

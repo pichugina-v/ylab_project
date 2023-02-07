@@ -6,11 +6,7 @@ from redis import asyncio
 load_dotenv()
 
 
-pool = asyncio.ConnectionPool(
-    host=f'{os.getenv("REDIS_SERVICE")}',
-    port=os.getenv('REDIS_PORT'),
-    db=os.getenv('REDIS_DB'),
-)
+pool = asyncio.ConnectionPool.from_url(str(os.getenv('REDIS_URL')))
 
 
 async def get_redis():

@@ -1,12 +1,13 @@
 import asyncio
+import os
 from logging.config import fileConfig
 
+from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
 
 from alembic import context
-from app.db.database import SQLALCHEMY_DATABASE_URL
 from app.db.sqlalchemy_base import Base
 from app.v1.models.models import *
 
@@ -14,7 +15,9 @@ from app.v1.models.models import *
 # access to the values within the .ini file in use.
 config = context.config
 
-sqlalchemy_url = SQLALCHEMY_DATABASE_URL
+load_dotenv()
+
+sqlalchemy_url = os.getenv('POSTGRES_URL')
 config.set_main_option('sqlalchemy.url', sqlalchemy_url)
 
 # Interpret the config file for Python logging.
